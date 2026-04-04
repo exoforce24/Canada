@@ -86,6 +86,136 @@
 
     updateProgress();
 
+    // ===== WEATHER DATA (historical averages for late May / early June) =====
+    const weatherData = {
+        1:  { hi: 17, lo: 10, icon: '🌤', cond: 'Partly cloudy', loc: 'Vancouver' },
+        2:  { hi: 18, lo: 10, icon: '☀️', cond: 'Mostly sunny', loc: 'Vancouver' },
+        3:  { hi: 16, lo: 9,  icon: '🌤', cond: 'Partly cloudy', loc: 'Whistler' },
+        4:  { hi: 19, lo: 7,  icon: '🌤', cond: 'Partly cloudy', loc: 'Calgary' },
+        5:  { hi: 15, lo: 3,  icon: '☀️', cond: 'Sunny', loc: 'Banff' },
+        6:  { hi: 15, lo: 3,  icon: '⛅', cond: 'Mix sun/cloud', loc: 'Banff' },
+        7:  { hi: 14, lo: 2,  icon: '☀️', cond: 'Sunny', loc: 'Yoho' },
+        8:  { hi: 13, lo: 1,  icon: '🌤', cond: 'Cool & clear', loc: 'Lake Louise' },
+        9:  { hi: 14, lo: 2,  icon: '⛅', cond: 'Mix sun/cloud', loc: 'Field' },
+        10: { hi: 13, lo: 1,  icon: '☀️', cond: 'Sunny', loc: 'Icefields' },
+        11: { hi: 14, lo: 2,  icon: '🌤', cond: 'Partly cloudy', loc: 'Jasper' },
+        12: { hi: 15, lo: 3,  icon: '☀️', cond: 'Sunny', loc: 'Jasper' },
+        13: { hi: 16, lo: 4,  icon: '⛅', cond: 'Mix sun/cloud', loc: 'Jasper' },
+        14: { hi: 16, lo: 4,  icon: '☀️', cond: 'Sunny', loc: 'Jasper' },
+        15: { hi: 15, lo: 3,  icon: '🌤', cond: 'Partly cloudy', loc: 'Jasper' },
+        16: { hi: 18, lo: 6,  icon: '⛅', cond: 'Mix sun/cloud', loc: 'Calgary' },
+        17: { hi: 22, lo: 13, icon: '🌤', cond: 'Partly cloudy', loc: 'Montreal' },
+        18: { hi: 21, lo: 12, icon: '☀️', cond: 'Sunny', loc: 'Quebec City' },
+        19: { hi: 22, lo: 13, icon: '☀️', cond: 'Sunny', loc: 'Montreal' },
+        20: { hi: 23, lo: 14, icon: '🌤', cond: 'Partly cloudy', loc: 'Montreal' },
+        21: { hi: 22, lo: 13, icon: '⛅', cond: 'Mix sun/cloud', loc: 'Montreal' },
+        22: { hi: 40, lo: 30, icon: '☀️', cond: 'Hot & sunny', loc: 'Doha' },
+        23: { hi: 31, lo: 26, icon: '🌤', cond: 'Warm & humid', loc: 'Singapore' },
+    };
+
+    // Inject weather badges into day headers
+    Object.entries(weatherData).forEach(([dayNum, w]) => {
+        const dayInfo = document.querySelector(`#day-${dayNum} .day-info`);
+        if (dayInfo) {
+            const badge = document.createElement('span');
+            badge.className = 'weather-badge';
+            badge.innerHTML = `<i class="weather-icon">${w.icon}</i> ${w.hi}°/${w.lo}°C &middot; ${w.cond}`;
+            badge.title = `${w.loc} historical average for this date`;
+            dayInfo.appendChild(badge);
+        }
+    });
+
+    // ===== PER-DAY NOTES =====
+    const NOTES_KEY = 'canada-honeymoon-notes';
+
+    function loadNotes() {
+        try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; }
+        catch { return {}; }
+    }
+
+    function saveNotes(notes) {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+    }
+
+    const savedNotes = loadNotes();
+
+    document.querySelectorAll('.day-body').forEach(body => {
+        const card = body.closest('.day-card');
+        if (!card) return;
+        const dayId = card.id; // e.g. "day-1"
+
+        const notesDiv = document.createElement('div');
+        notesDiv.className = 'day-notes';
+        notesDiv.innerHTML = `
+            <div class="day-notes-label">&#128221; Notes</div>
+            <textarea placeholder="Jot down notes, reminders, or memories..." data-note="${dayId}"></textarea>
+        `;
+        body.appendChild(notesDiv);
+
+        const textarea = notesDiv.querySelector('textarea');
+        if (savedNotes[dayId]) textarea.value = savedNotes[dayId];
+
+        let saveTimeout;
+        textarea.addEventListener('input', () => {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                const notes = loadNotes();
+                if (textarea.value.trim()) {
+                    notes[dayId] = textarea.value;
+                } else {
+                    delete notes[dayId];
+                }
+                saveNotes(notes);
+            }, 400);
+        });
+
+        // Prevent day card collapse when clicking textarea
+        textarea.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    // ===== ESSENTIALS PERSISTENCE =====
+    const ESSENTIALS_KEY = 'canada-honeymoon-essentials';
+
+    function loadEssentials() {
+        try { return JSON.parse(localStorage.getItem(ESSENTIALS_KEY)) || {}; }
+        catch { return {}; }
+    }
+
+    function saveEssentials(data) {
+        localStorage.setItem(ESSENTIALS_KEY, JSON.stringify(data));
+    }
+
+    const savedEssentials = loadEssentials();
+
+    document.querySelectorAll('.essentials-field input').forEach(input => {
+        const key = input.dataset.essential;
+        if (savedEssentials[key]) input.value = savedEssentials[key];
+
+        input.addEventListener('input', () => {
+            const data = loadEssentials();
+            if (input.value.trim()) {
+                data[key] = input.value;
+            } else {
+                delete data[key];
+            }
+            saveEssentials(data);
+        });
+    });
+
+    // ===== OFFLINE INDICATOR =====
+    const offlineBanner = document.createElement('div');
+    offlineBanner.className = 'offline-banner';
+    offlineBanner.textContent = '📡 You\'re offline — don\'t worry, everything still works!';
+    document.body.appendChild(offlineBanner);
+
+    function updateOnlineStatus() {
+        offlineBanner.classList.toggle('visible', !navigator.onLine);
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+
     // ===== QUICK NAV =====
     const days = [
         { num: 1, label: 'D1', date: 'May 23' },
@@ -121,6 +251,7 @@
         { id: 'flights', label: 'Flights' },
         { id: 'cars', label: 'Cars' },
         { id: 'viewpoints', label: 'Views' },
+        { id: 'essentials', label: 'Info' },
     ];
 
     sections.forEach(s => {
