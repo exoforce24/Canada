@@ -117,6 +117,7 @@
 
     // Add section links
     const sections = [
+        { id: 'map-section', label: 'Map' },
         { id: 'flights', label: 'Flights' },
         { id: 'cars', label: 'Cars' },
         { id: 'viewpoints', label: 'Views' },

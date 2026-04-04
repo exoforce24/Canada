@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -58,6 +59,32 @@
         </div>
     </div>
 </nav>
+
+<!-- Map Section -->
+<section class="section map-section" id="map-section">
+    <div class="container">
+        <h2 class="section-title">&#128506; Route Overview</h2>
+        <p class="map-subtitle">All 23 days across Canada — tap any marker for details</p>
+        <div class="map-filters">
+            <button class="map-filter active" data-filter="all">All Stops</button>
+            <button class="map-filter" data-filter="star">&#11088; Viewpoints</button>
+            <button class="map-filter" data-filter="dining">&#127860; Dining</button>
+            <button class="map-filter" data-filter="hike">&#129406; Hikes</button>
+            <button class="map-filter" data-filter="flight">&#9992;&#65039; Flights</button>
+        </div>
+    </div>
+    <div id="trip-map"></div>
+    <div class="container">
+        <div class="map-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#00bcd4"></span>Vancouver</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#4caf50"></span>Rockies</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#66bb6a"></span>Jasper</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#7c4dff"></span>Quebec</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#e040fb"></span>Montreal</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d4a853"></span>&#11088; Viewpoints</span>
+        </div>
+    </div>
+</section>
 
 <!-- Flights Section -->
 <section class="section flights-section" id="flights">
@@ -668,6 +695,8 @@
     <p>Made with &#10084;&#65039; for the honeymoon of a lifetime</p>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="map.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
