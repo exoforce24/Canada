@@ -173,6 +173,117 @@
         textarea.addEventListener('click', (e) => e.stopPropagation());
     });
 
+    // ===== ESSENTIALS PASSWORD LOCK =====
+    const LOCK_KEY = 'canada-honeymoon-lock';
+    const lockOverlay = document.getElementById('essentials-lock');
+    const lockContent = document.getElementById('essentials-content');
+    const lockPasswordInput = document.getElementById('lock-password');
+    const lockSubmitBtn = document.getElementById('lock-submit');
+    const lockError = document.getElementById('lock-error');
+    const lockSetup = document.getElementById('lock-setup');
+    const lockNewPassword = document.getElementById('lock-new-password');
+    const lockSetBtn = document.getElementById('lock-set-btn');
+    const lockAgainBtn = document.getElementById('lock-btn');
+
+    // Simple hash for the password (not cryptographic — just keeps casual eyes away)
+    function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const chr = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        return 'h_' + Math.abs(hash).toString(36);
+    }
+
+    function getLockData() {
+        try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || {}; }
+        catch { return {}; }
+    }
+
+    function saveLockData(data) {
+        localStorage.setItem(LOCK_KEY, JSON.stringify(data));
+    }
+
+    function unlockEssentials() {
+        lockOverlay.style.display = 'none';
+        lockContent.style.display = '';
+        const data = getLockData();
+        data.unlocked = true;
+        saveLockData(data);
+    }
+
+    function lockEssentials() {
+        lockOverlay.style.display = '';
+        lockContent.style.display = 'none';
+        lockPasswordInput.value = '';
+        lockError.textContent = '';
+        const data = getLockData();
+        data.unlocked = false;
+        saveLockData(data);
+    }
+
+    // Check if password is set
+    const lockData = getLockData();
+    if (lockData.hash) {
+        // Password exists — hide setup
+        lockSetup.style.display = 'none';
+        document.querySelector('.lock-hint').style.display = 'none';
+
+        // Auto-unlock if previously unlocked in this session
+        if (lockData.unlocked) {
+            unlockEssentials();
+        }
+    }
+
+    // Set new password
+    lockSetBtn.addEventListener('click', () => {
+        const pw = lockNewPassword.value.trim();
+        if (!pw) return;
+        if (pw.length < 3) {
+            lockError.textContent = 'Password must be at least 3 characters';
+            return;
+        }
+        const data = getLockData();
+        data.hash = simpleHash(pw);
+        saveLockData(data);
+        lockSetup.style.display = 'none';
+        document.querySelector('.lock-hint').style.display = 'none';
+        lockError.textContent = '';
+        lockError.style.color = '#66bb6a';
+        lockError.textContent = 'Password set! Now enter it above to unlock.';
+    });
+
+    // Unlock with password
+    function tryUnlock() {
+        const pw = lockPasswordInput.value.trim();
+        if (!pw) return;
+        const data = getLockData();
+        if (!data.hash) {
+            lockError.textContent = 'Set a password first';
+            return;
+        }
+        if (simpleHash(pw) === data.hash) {
+            unlockEssentials();
+        } else {
+            lockError.style.color = '#e53935';
+            lockError.textContent = 'Wrong password. Try again.';
+            lockPasswordInput.value = '';
+            lockPasswordInput.focus();
+        }
+    }
+
+    lockSubmitBtn.addEventListener('click', tryUnlock);
+    lockPasswordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') tryUnlock();
+    });
+    lockNewPassword.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') lockSetBtn.click();
+    });
+
+    // Lock again button
+    lockAgainBtn.addEventListener('click', lockEssentials);
+
     // ===== ESSENTIALS PERSISTENCE =====
     const ESSENTIALS_KEY = 'canada-honeymoon-essentials';
 

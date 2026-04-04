@@ -204,7 +204,30 @@
 <section class="section essentials-section" id="essentials">
     <div class="container">
         <h2 class="section-title">&#128203; Trip Essentials</h2>
-        <p class="essentials-subtitle">Tap any field to add your booking references &mdash; saved locally on this device</p>
+
+        <!-- Password Lock Overlay -->
+        <div class="essentials-lock" id="essentials-lock">
+            <div class="lock-icon">&#128274;</div>
+            <p class="lock-text">Enter your shared password to view trip details</p>
+            <div class="lock-form">
+                <input type="password" id="lock-password" placeholder="Password" autocomplete="off">
+                <button id="lock-submit">Unlock</button>
+            </div>
+            <p class="lock-error" id="lock-error"></p>
+            <p class="lock-hint">First time? Set your password below.</p>
+            <div class="lock-setup" id="lock-setup">
+                <input type="password" id="lock-new-password" placeholder="Set a new password" autocomplete="off">
+                <button id="lock-set-btn">Set Password</button>
+            </div>
+        </div>
+
+        <!-- Locked content (hidden until unlocked) -->
+        <div class="essentials-content" id="essentials-content" style="display:none;">
+            <p class="essentials-subtitle">Tap any field to add your booking references &mdash; saved locally on this device</p>
+            <div class="essentials-unlocked-bar">
+                <span>&#128275; Unlocked</span>
+                <button id="lock-btn" class="lock-again-btn">Lock</button>
+            </div>
         <div class="essentials-grid">
             <div class="essentials-card">
                 <h4>&#127968; Accommodations</h4>
@@ -305,6 +328,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </section>

@@ -834,6 +834,127 @@ body {
     gap: 4px;
 }
 
+/* ========== ESSENTIALS LOCK ========== */
+.essentials-lock {
+    text-align: center;
+    padding: 48px 20px;
+}
+
+.lock-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.lock-text {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.lock-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    max-width: 320px;
+    margin: 0 auto 12px;
+}
+
+.lock-form input,
+.lock-setup input {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    padding: 10px 14px;
+    text-align: center;
+    letter-spacing: 0.15em;
+}
+
+.lock-form input::placeholder,
+.lock-setup input::placeholder {
+    color: rgba(136,136,153,0.4);
+    letter-spacing: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.lock-form input:focus,
+.lock-setup input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.lock-form button,
+.lock-setup button {
+    padding: 10px 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s;
+}
+
+.lock-form button:hover,
+.lock-setup button:hover {
+    opacity: 0.85;
+}
+
+.lock-error {
+    color: #e53935;
+    font-size: 0.8rem;
+    min-height: 20px;
+}
+
+.lock-hint {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin: 16px 0 8px;
+}
+
+.lock-setup {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.essentials-unlocked-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: rgba(76,175,80,0.08);
+    border: 1px solid rgba(76,175,80,0.2);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #66bb6a;
+}
+
+.lock-again-btn {
+    padding: 4px 14px;
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.lock-again-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+}
+
 /* ========== ESSENTIALS / EMERGENCY INFO ========== */
 .essentials-section {
     background: var(--bg-card);
