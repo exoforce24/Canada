@@ -859,8 +859,7 @@ body {
     margin: 0 auto 12px;
 }
 
-.lock-form input,
-.lock-setup input {
+.lock-form input {
     flex: 1;
     background: rgba(255,255,255,0.05);
     border: 1px solid var(--border);
@@ -873,21 +872,18 @@ body {
     letter-spacing: 0.15em;
 }
 
-.lock-form input::placeholder,
-.lock-setup input::placeholder {
+.lock-form input::placeholder {
     color: rgba(136,136,153,0.4);
     letter-spacing: 0;
     font-family: 'Inter', sans-serif;
 }
 
-.lock-form input:focus,
-.lock-setup input:focus {
+.lock-form input:focus {
     outline: none;
     border-color: var(--accent);
 }
 
-.lock-form button,
-.lock-setup button {
+.lock-form button {
     padding: 10px 20px;
     background: var(--accent);
     color: white;
@@ -900,8 +896,7 @@ body {
     transition: opacity 0.2s;
 }
 
-.lock-form button:hover,
-.lock-setup button:hover {
+.lock-form button:hover {
     opacity: 0.85;
 }
 
@@ -909,20 +904,6 @@ body {
     color: #e53935;
     font-size: 0.8rem;
     min-height: 20px;
-}
-
-.lock-hint {
-    color: var(--text-dim);
-    font-size: 0.8rem;
-    margin: 16px 0 8px;
-}
-
-.lock-setup {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    max-width: 320px;
-    margin: 0 auto;
 }
 
 .essentials-unlocked-bar {
@@ -1004,27 +985,17 @@ body {
     letter-spacing: 0.05em;
 }
 
-.essentials-field input {
-    width: 100%;
+.essentials-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    padding: 8px 10px;
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--border);
     border-radius: 6px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    padding: 8px 10px;
-    transition: border-color 0.2s;
-}
-
-.essentials-field input::placeholder {
-    color: rgba(136,136,153,0.4);
-    font-family: 'Inter', sans-serif;
-}
-
-.essentials-field input:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: rgba(255,255,255,0.06);
+    word-break: break-word;
+    user-select: all;
+    -webkit-user-select: all;
 }
 
 /* Timezone grid */

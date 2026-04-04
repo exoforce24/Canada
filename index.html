@@ -214,112 +214,58 @@
                 <button id="lock-submit">Unlock</button>
             </div>
             <p class="lock-error" id="lock-error"></p>
-            <p class="lock-hint">First time? Set your password below.</p>
-            <div class="lock-setup" id="lock-setup">
-                <input type="password" id="lock-new-password" placeholder="Set a new password" autocomplete="off">
-                <button id="lock-set-btn">Set Password</button>
-            </div>
         </div>
 
-        <!-- Locked content (hidden until unlocked) -->
+        <!-- Decrypted content appears here -->
         <div class="essentials-content" id="essentials-content" style="display:none;">
-            <p class="essentials-subtitle">Tap any field to add your booking references &mdash; saved locally on this device</p>
             <div class="essentials-unlocked-bar">
                 <span>&#128275; Unlocked</span>
                 <button id="lock-btn" class="lock-again-btn">Lock</button>
             </div>
-        <div class="essentials-grid">
-            <div class="essentials-card">
-                <h4>&#127968; Accommodations</h4>
-                <div class="essentials-field">
-                    <label>Vancouver Airbnb</label>
-                    <input type="text" data-essential="accom-vancouver" placeholder="Address / confirmation #">
+            <div class="essentials-grid">
+                <div class="essentials-card" id="essentials-accom">
+                    <h4>&#127968; Accommodations</h4>
+                    <div id="accom-list"></div>
                 </div>
-                <div class="essentials-field">
-                    <label>Canmore Accommodation</label>
-                    <input type="text" data-essential="accom-canmore" placeholder="Address / confirmation #">
+                <div class="essentials-card" id="essentials-cars">
+                    <h4>&#128663; Car Rentals</h4>
+                    <div id="cars-list"></div>
                 </div>
-                <div class="essentials-field">
-                    <label>Field Airbnb (Yoho)</label>
-                    <input type="text" data-essential="accom-field" placeholder="Address / confirmation #">
+                <div class="essentials-card" id="essentials-contacts">
+                    <h4>&#128178; Important Contacts</h4>
+                    <div id="contacts-list"></div>
                 </div>
-                <div class="essentials-field">
-                    <label>Lake Louise Inn</label>
-                    <input type="text" data-essential="accom-lakelouise" placeholder="Address / confirmation #">
-                </div>
-                <div class="essentials-field">
-                    <label>Glacier View Lodge</label>
-                    <input type="text" data-essential="accom-glacier" placeholder="Address / confirmation #">
-                </div>
-                <div class="essentials-field">
-                    <label>Hinton Airbnb (Jasper)</label>
-                    <input type="text" data-essential="accom-hinton" placeholder="Address / confirmation #">
-                </div>
-                <div class="essentials-field">
-                    <label>Hampton Inn Calgary</label>
-                    <input type="text" data-essential="accom-calgary" placeholder="Address / confirmation #">
-                </div>
-                <div class="essentials-field">
-                    <label>Quebec City Hotel</label>
-                    <input type="text" data-essential="accom-quebec" placeholder="Address / confirmation #">
-                </div>
-                <div class="essentials-field">
-                    <label>Montreal Hotel</label>
-                    <input type="text" data-essential="accom-montreal" placeholder="Address / confirmation #">
+                <div class="essentials-card">
+                    <h4>&#9201; Timezone Guide</h4>
+                    <div class="tz-grid">
+                        <div class="tz-item">
+                            <span class="tz-city">Singapore</span>
+                            <span class="tz-offset">SGT (UTC+8)</span>
+                            <span class="tz-diff">Home</span>
+                        </div>
+                        <div class="tz-item">
+                            <span class="tz-city">Vancouver</span>
+                            <span class="tz-offset">PDT (UTC-7)</span>
+                            <span class="tz-diff">-15h from SG</span>
+                        </div>
+                        <div class="tz-item">
+                            <span class="tz-city">Banff / Jasper / Calgary</span>
+                            <span class="tz-offset">MDT (UTC-6)</span>
+                            <span class="tz-diff">-14h from SG</span>
+                        </div>
+                        <div class="tz-item">
+                            <span class="tz-city">Montreal / Quebec City</span>
+                            <span class="tz-offset">EDT (UTC-4)</span>
+                            <span class="tz-diff">-12h from SG</span>
+                        </div>
+                        <div class="tz-item">
+                            <span class="tz-city">Doha</span>
+                            <span class="tz-offset">AST (UTC+3)</span>
+                            <span class="tz-diff">-5h from SG</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="essentials-card">
-                <h4>&#128663; Car Rentals</h4>
-                <div class="essentials-field">
-                    <label>Porsche 911 (Vancouver)</label>
-                    <input type="text" data-essential="car-porsche" placeholder="Confirmation # / pickup location">
-                </div>
-                <div class="essentials-field">
-                    <label>BMW 3 Series (Rockies)</label>
-                    <input type="text" data-essential="car-bmw" placeholder="Confirmation # / pickup location">
-                </div>
-                <div class="essentials-field">
-                    <label>BMW X4M (Montreal)</label>
-                    <input type="text" data-essential="car-x4m" placeholder="Confirmation # / pickup location">
-                </div>
-            </div>
-            <div class="essentials-card">
-                <h4>&#128178; Important Contacts</h4>
-                <div class="essentials-field">
-                    <label>Travel Insurance</label>
-                    <input type="text" data-essential="insurance" placeholder="Policy # / phone number">
-                </div>
-                <div class="essentials-field">
-                    <label>Emergency Contact</label>
-                    <input type="text" data-essential="emergency-contact" placeholder="Name / phone">
-                </div>
-                <div class="essentials-field">
-                    <label>Singapore Embassy (Ottawa)</label>
-                    <input type="text" data-essential="embassy" placeholder="+1 613-241-2043" value="+1 613-241-2043">
-                </div>
-            </div>
-            <div class="essentials-card">
-                <h4>&#9201; Timezone Guide</h4>
-                <div class="tz-grid">
-                    <div class="tz-item">
-                        <span class="tz-city">Singapore</span>
-                        <span class="tz-offset">SGT (UTC+8)</span>
-                        <span class="tz-diff">Home</span>
-                    </div>
-                    <div class="tz-item">
-                        <span class="tz-city">Vancouver</span>
-                        <span class="tz-offset">PDT (UTC-7)</span>
-                        <span class="tz-diff">-15h from SG</span>
-                    </div>
-                    <div class="tz-item">
-                        <span class="tz-city">Banff / Jasper / Calgary</span>
-                        <span class="tz-offset">MDT (UTC-6)</span>
-                        <span class="tz-diff">-14h from SG</span>
-                    </div>
-                    <div class="tz-item">
-                        <span class="tz-city">Montreal / Quebec City</span>
-                        <span class="tz-offset">EDT (UTC-4)</span>
-                        <span class="tz-diff">-12h from SG</span>
                     </div>
                     <div class="tz-item">
                         <span class="tz-city">Doha</span>

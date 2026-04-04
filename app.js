@@ -173,103 +173,115 @@
         textarea.addEventListener('click', (e) => e.stopPropagation());
     });
 
-    // ===== ESSENTIALS PASSWORD LOCK =====
-    const LOCK_KEY = 'canada-honeymoon-lock';
+    // ===== ENCRYPTED ESSENTIALS WITH AES-256-GCM =====
+    // Data is encrypted with password — only decryptable client-side
+    const ENCRYPTED_DATA = 'jObH4Ww+vTHjGeMG/aFnyUDRano4i8d2qjh1HeyNgoVJ/pKmDTi3jbprx0ZS4bi06VRLFA81O3udkYnbQhINNaxFYU7lphEO6j9g10AQIfTlpoT0VARWQ5elX9BK36T3J60Ewn1zHsfVn0N7BL1HZfVol2oTQkJanGGzc/Do0s3OJcP4O0cPf9P0NXsXfssSTp8Gdl1hJJnO89RcUxMtCjyxSZU+Nl6fL3t87Lh4jDzgA1boA/hKxQwxa9QJGLD2mQlJwGwP37RgUv+WKr6KofwFmrSaWIQHmBxEDNKFCK4LdQu12nFg45+8qSlsPxzI7Q+5MuE/gyksvI/DJQRojMFje8J9dueZ1Hh9T0fj3ACnVBkkGMIbHqnKle5dwI9jhVKOGm8Yw4WQuOfksmnG71pWdIWH/H/TXLWuyl10hF5UHAVgxohXRPmfF/jjwJ/6GHgVr/1Qi3u7TFwdLNThGHtcHOoLd1ymwHncAP+RPa8numt9RFy6hj4O4wZeluRhiij8p4dkmLXGGp4oTquApxz/lOt5cFKEEE+4gUv/HAj1FpQXR3sGnwGJFD37dghrkuuNEwqVrTaj3a8PjlVsZCD7Ig6jmrC+FUjOqkSQjnsGJoQx35tTFGIZwf/YDjeUNhmwcPfq5aOc2ubvCd6Td69Xx0iSzUHmm+IZcHyk1IpqRlbovuJboJfL1/05OOwyPrrb3KZR1RABJNcRV8fEB8lFfsKyfFPyGZw4SJNxb7E8U0c1yy0HiPuzUhop/z1WyI4PA0YaX8V9gGOSkDgRBpxFddWkZxlniz9W7AuRlLVUCVGwiODcI7IdKD+WmddSVQnBhV5ZrSh4s/jMMDl5/gCGxpuM/JR6jNFcOmTXP5OkWRfh6ND2U2vx8eS2hfXr6towGZGjLvVOgPdn+Mz+aiIg8Gc1PpNmnJ70Sj+TIUQW+TF4E6DgjNrGxcIKM94EENoAu+j6DPze1QzfU87pMIH9yorQ4uyRGt51WusBYNzv3jAM8JWztMSKM1l4KSZGRcyWDSYKei9IgOGmpR5nAktUNChgRWXCnc7jIoGJYHrtFGDRTVYMJfDItbIVVc8=';
+
     const lockOverlay = document.getElementById('essentials-lock');
     const lockContent = document.getElementById('essentials-content');
     const lockPasswordInput = document.getElementById('lock-password');
     const lockSubmitBtn = document.getElementById('lock-submit');
     const lockError = document.getElementById('lock-error');
-    const lockSetup = document.getElementById('lock-setup');
-    const lockNewPassword = document.getElementById('lock-new-password');
-    const lockSetBtn = document.getElementById('lock-set-btn');
     const lockAgainBtn = document.getElementById('lock-btn');
 
-    // Simple hash for the password (not cryptographic — just keeps casual eyes away)
-    function simpleHash(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const chr = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0;
-        }
-        return 'h_' + Math.abs(hash).toString(36);
+    // Field display names
+    const fieldLabels = {
+        'accom-vancouver': 'Vancouver Airbnb',
+        'accom-canmore': 'Canmore Accommodation',
+        'accom-field': 'Field Airbnb (Yoho)',
+        'accom-lakelouise': 'Lake Louise Inn',
+        'accom-glacier': 'Glacier View Lodge',
+        'accom-hinton': 'Hinton Airbnb (Jasper)',
+        'accom-calgary': 'Hampton Inn Calgary',
+        'accom-quebec': 'Quebec City Hotel',
+        'accom-montreal': 'Montreal Hotel',
+        'car-porsche': 'Porsche 911 (Vancouver)',
+        'car-bmw': 'BMW 3 Series (Rockies)',
+        'car-x4m': 'BMW X4M (Montreal)',
+        'insurance': 'Travel Insurance',
+        'emergency-contact': 'Emergency Contact',
+        'embassy': 'Singapore Embassy (Ottawa)',
+    };
+
+    // AES-256-GCM decryption using Web Crypto API
+    async function decryptData(password, encryptedBase64) {
+        const combined = Uint8Array.from(atob(encryptedBase64), c => c.charCodeAt(0));
+
+        const salt = combined.slice(0, 16);
+        const iv = combined.slice(16, 28);
+        const authTag = combined.slice(28, 44);
+        const ciphertext = combined.slice(44);
+
+        // Recombine ciphertext + authTag (Web Crypto expects them together)
+        const cipherWithTag = new Uint8Array(ciphertext.length + authTag.length);
+        cipherWithTag.set(ciphertext);
+        cipherWithTag.set(authTag, ciphertext.length);
+
+        // Derive key with PBKDF2
+        const encoder = new TextEncoder();
+        const keyMaterial = await crypto.subtle.importKey(
+            'raw', encoder.encode(password), 'PBKDF2', false, ['deriveKey']
+        );
+        const key = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
+            keyMaterial,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['decrypt']
+        );
+
+        const decrypted = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: iv },
+            key,
+            cipherWithTag
+        );
+
+        return JSON.parse(new TextDecoder().decode(decrypted));
     }
 
-    function getLockData() {
-        try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || {}; }
-        catch { return {}; }
+    function renderEssentials(data) {
+        const accomList = document.getElementById('accom-list');
+        const carsList = document.getElementById('cars-list');
+        const contactsList = document.getElementById('contacts-list');
+
+        accomList.innerHTML = '';
+        carsList.innerHTML = '';
+        contactsList.innerHTML = '';
+
+        Object.entries(data).forEach(([key, value]) => {
+            const label = fieldLabels[key] || key;
+            const fieldHtml = `<div class="essentials-field"><label>${label}</label><div class="essentials-value">${value}</div></div>`;
+
+            if (key.startsWith('accom-')) {
+                accomList.insertAdjacentHTML('beforeend', fieldHtml);
+            } else if (key.startsWith('car-')) {
+                carsList.insertAdjacentHTML('beforeend', fieldHtml);
+            } else {
+                contactsList.insertAdjacentHTML('beforeend', fieldHtml);
+            }
+        });
     }
 
-    function saveLockData(data) {
-        localStorage.setItem(LOCK_KEY, JSON.stringify(data));
-    }
-
-    function unlockEssentials() {
-        lockOverlay.style.display = 'none';
-        lockContent.style.display = '';
-        const data = getLockData();
-        data.unlocked = true;
-        saveLockData(data);
-    }
-
-    function lockEssentials() {
-        lockOverlay.style.display = '';
-        lockContent.style.display = 'none';
-        lockPasswordInput.value = '';
-        lockError.textContent = '';
-        const data = getLockData();
-        data.unlocked = false;
-        saveLockData(data);
-    }
-
-    // Check if password is set
-    const lockData = getLockData();
-    if (lockData.hash) {
-        // Password exists — hide setup
-        lockSetup.style.display = 'none';
-        document.querySelector('.lock-hint').style.display = 'none';
-
-        // Auto-unlock if previously unlocked in this session
-        if (lockData.unlocked) {
-            unlockEssentials();
-        }
-    }
-
-    // Set new password
-    lockSetBtn.addEventListener('click', () => {
-        const pw = lockNewPassword.value.trim();
-        if (!pw) return;
-        if (pw.length < 3) {
-            lockError.textContent = 'Password must be at least 3 characters';
-            return;
-        }
-        const data = getLockData();
-        data.hash = simpleHash(pw);
-        saveLockData(data);
-        lockSetup.style.display = 'none';
-        document.querySelector('.lock-hint').style.display = 'none';
-        lockError.textContent = '';
-        lockError.style.color = '#66bb6a';
-        lockError.textContent = 'Password set! Now enter it above to unlock.';
-    });
-
-    // Unlock with password
-    function tryUnlock() {
+    async function tryUnlock() {
         const pw = lockPasswordInput.value.trim();
         if (!pw) return;
-        const data = getLockData();
-        if (!data.hash) {
-            lockError.textContent = 'Set a password first';
-            return;
-        }
-        if (simpleHash(pw) === data.hash) {
-            unlockEssentials();
-        } else {
-            lockError.style.color = '#e53935';
+
+        lockSubmitBtn.textContent = '...';
+        lockSubmitBtn.disabled = true;
+
+        try {
+            const data = await decryptData(pw, ENCRYPTED_DATA);
+            renderEssentials(data);
+            lockOverlay.style.display = 'none';
+            lockContent.style.display = '';
+            lockError.textContent = '';
+        } catch {
             lockError.textContent = 'Wrong password. Try again.';
             lockPasswordInput.value = '';
             lockPasswordInput.focus();
+        } finally {
+            lockSubmitBtn.textContent = 'Unlock';
+            lockSubmitBtn.disabled = false;
         }
     }
 
@@ -277,40 +289,16 @@
     lockPasswordInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') tryUnlock();
     });
-    lockNewPassword.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') lockSetBtn.click();
-    });
 
-    // Lock again button
-    lockAgainBtn.addEventListener('click', lockEssentials);
-
-    // ===== ESSENTIALS PERSISTENCE =====
-    const ESSENTIALS_KEY = 'canada-honeymoon-essentials';
-
-    function loadEssentials() {
-        try { return JSON.parse(localStorage.getItem(ESSENTIALS_KEY)) || {}; }
-        catch { return {}; }
-    }
-
-    function saveEssentials(data) {
-        localStorage.setItem(ESSENTIALS_KEY, JSON.stringify(data));
-    }
-
-    const savedEssentials = loadEssentials();
-
-    document.querySelectorAll('.essentials-field input').forEach(input => {
-        const key = input.dataset.essential;
-        if (savedEssentials[key]) input.value = savedEssentials[key];
-
-        input.addEventListener('input', () => {
-            const data = loadEssentials();
-            if (input.value.trim()) {
-                data[key] = input.value;
-            } else {
-                delete data[key];
-            }
-            saveEssentials(data);
-        });
+    // Lock again
+    lockAgainBtn.addEventListener('click', () => {
+        lockOverlay.style.display = '';
+        lockContent.style.display = 'none';
+        lockPasswordInput.value = '';
+        lockError.textContent = '';
+        document.getElementById('accom-list').innerHTML = '';
+        document.getElementById('cars-list').innerHTML = '';
+        document.getElementById('contacts-list').innerHTML = '';
     });
 
     // ===== OFFLINE INDICATOR =====
