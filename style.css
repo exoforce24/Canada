@@ -1037,6 +1037,371 @@ body {
     text-align: right;
 }
 
+/* ========== SUNRISE / SUNSET BADGE ========== */
+.sun-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.sun-rise, .sun-set {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* ========== "THIS TIME TOMORROW" ========== */
+.tomorrow-section {
+    padding: 20px 0;
+}
+
+.tomorrow-card {
+    background: linear-gradient(135deg, rgba(200,16,46,0.08), rgba(212,168,83,0.08));
+    border: 1px solid rgba(212,168,83,0.2);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    text-align: center;
+}
+
+.tomorrow-label {
+    font-size: 0.8rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.tomorrow-content {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text-bright);
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* ========== PACKING CHECKLIST ========== */
+.packing-section {
+    background: var(--bg-card);
+}
+
+.packing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.packing-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.packing-card h4 {
+    color: var(--text-bright);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+
+/* ========== RESTAURANT RESERVATIONS ========== */
+.reservations-section {
+    background: var(--bg);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-top: -20px;
+    margin-bottom: 24px;
+}
+
+.reservations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.reservation-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.reservation-card h4 {
+    color: var(--text-bright);
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.res-priority {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.priority-high .res-priority {
+    background: rgba(229,57,53,0.15);
+    color: #ef5350;
+}
+
+.priority-med .res-priority {
+    background: rgba(255,167,38,0.15);
+    color: #ffa726;
+}
+
+.priority-low .res-priority {
+    background: rgba(102,187,106,0.15);
+    color: #66bb6a;
+}
+
+.res-day {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+.res-loc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+}
+
+.res-note {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 8px;
+}
+
+.reservation-card .check-item {
+    padding: 4px 0;
+}
+
+/* ========== STARGAZING ========== */
+.stargazing-section {
+    background: var(--bg-card);
+}
+
+.stargazing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.star-night-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color 0.2s;
+}
+
+.star-night-card:hover {
+    border-color: rgba(212,168,83,0.4);
+}
+
+.star-night-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.star-moon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.star-night-header h4 {
+    color: var(--text-bright);
+    font-size: 0.95rem;
+}
+
+.star-loc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.star-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.star-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.star-detail:last-child { border-bottom: none; }
+
+.star-label {
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+.star-quality {
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.star-excellent {
+    background: rgba(102,187,106,0.15);
+    color: #66bb6a;
+}
+
+.star-good {
+    background: rgba(255,167,38,0.15);
+    color: #ffa726;
+}
+
+/* ========== DRIVING DISTANCES ========== */
+.driving-section {
+    background: var(--bg);
+}
+
+.driving-table {
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.drive-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 90px 50px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+}
+
+.drive-row:last-child { border-bottom: none; }
+
+.drive-header {
+    background: var(--bg-card);
+    font-weight: 600;
+    color: var(--text-bright);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.highlight-drive {
+    background: rgba(212,168,83,0.05);
+    border-left: 3px solid var(--gold);
+}
+
+.drive-route {
+    color: var(--text);
+}
+
+.drive-dist, .drive-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-align: center;
+}
+
+.drive-day {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-align: center;
+}
+
+.driving-total {
+    text-align: center;
+    padding: 16px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* ========== TIPS & SAFETY ========== */
+.tips-section {
+    background: var(--bg-card);
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tip-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.tip-card h4 {
+    color: var(--text-bright);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+
+.tip-bear { border-top: 3px solid #8d6e63; }
+.tip-tipping { border-top: 3px solid var(--gold); }
+.tip-driving { border-top: 3px solid var(--flight); }
+.tip-general { border-top: 3px solid var(--accent); }
+
+.tip-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tip-card li {
+    font-size: 0.8rem;
+    color: var(--text);
+    padding: 4px 0;
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.tip-card li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+}
+
+.tip-card li strong {
+    color: var(--text-bright);
+}
+
 /* ========== OFFLINE INDICATOR ========== */
 .offline-banner {
     position: fixed;
@@ -1101,6 +1466,21 @@ body {
 
     .check-item {
         padding: 6px 8px;
+    }
+
+    .drive-row {
+        grid-template-columns: 1fr 65px 70px 40px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .drive-route { font-size: 0.75rem; }
+
+    .packing-grid,
+    .reservations-grid,
+    .stargazing-grid,
+    .tips-grid {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -351,6 +351,11 @@
         { id: 'cars', label: 'Cars' },
         { id: 'viewpoints', label: 'Views' },
         { id: 'essentials', label: 'Info' },
+        { id: 'packing', label: 'Pack' },
+        { id: 'reservations', label: 'Reserv.' },
+        { id: 'stargazing', label: 'Stars' },
+        { id: 'driving', label: 'Drives' },
+        { id: 'tips', label: 'Tips' },
     ];
 
     sections.forEach(s => {
@@ -437,5 +442,92 @@
     document.querySelectorAll('.day-card, .flights-section, .cars-section, .viewpoints-section').forEach(el => {
         observer.observe(el);
     });
+
+    // ===== SUNRISE / SUNSET TIMES =====
+    // Pre-calculated for each day's location (late May / early June 2026)
+    const sunData = {
+        1:  { rise: '5:18', set: '21:08', loc: 'Vancouver' },
+        2:  { rise: '5:17', set: '21:09', loc: 'Vancouver' },
+        3:  { rise: '5:16', set: '21:10', loc: 'Vancouver' },
+        4:  { rise: '5:24', set: '21:28', loc: 'Calgary' },
+        5:  { rise: '5:27', set: '21:35', loc: 'Banff' },
+        6:  { rise: '5:26', set: '21:36', loc: 'Banff' },
+        7:  { rise: '5:29', set: '21:39', loc: 'Yoho/Field' },
+        8:  { rise: '5:28', set: '21:38', loc: 'Lake Louise' },
+        9:  { rise: '5:28', set: '21:39', loc: 'Field' },
+        10: { rise: '5:27', set: '21:40', loc: 'Icefields' },
+        11: { rise: '5:14', set: '21:52', loc: 'Jasper' },
+        12: { rise: '5:13', set: '21:53', loc: 'Jasper' },
+        13: { rise: '5:12', set: '21:54', loc: 'Jasper' },
+        14: { rise: '5:12', set: '21:55', loc: 'Jasper' },
+        15: { rise: '5:11', set: '21:56', loc: 'Jasper' },
+        16: { rise: '5:22', set: '21:30', loc: 'Calgary' },
+        17: { rise: '5:05', set: '20:39', loc: 'Montreal' },
+        18: { rise: '4:52', set: '20:42', loc: 'Quebec City' },
+        19: { rise: '5:04', set: '20:40', loc: 'Montreal' },
+        20: { rise: '5:04', set: '20:41', loc: 'Montreal' },
+        21: { rise: '5:04', set: '20:41', loc: 'Montreal' },
+        22: { rise: '4:30', set: '18:18', loc: 'Doha' },
+        23: { rise: '6:59', set: '19:07', loc: 'Singapore' },
+    };
+
+    // Inject sunrise/sunset into day headers (after weather badge)
+    Object.entries(sunData).forEach(([dayNum, s]) => {
+        const dayInfo = document.querySelector(`#day-${dayNum} .day-info`);
+        if (dayInfo) {
+            const badge = document.createElement('span');
+            badge.className = 'sun-badge';
+            badge.innerHTML = `<span class="sun-rise">&#127749; ${s.rise}</span><span class="sun-set">&#127751; ${s.set}</span>`;
+            badge.title = `Sunrise/sunset times for ${s.loc}`;
+            dayInfo.appendChild(badge);
+        }
+    });
+
+    // ===== "THIS TIME TOMORROW" WIDGET =====
+    const tomorrowActivities = {
+        1:  'You\'ll be settling into your Vancouver Airbnb after a long flight!',
+        2:  'You\'ll be exploring Vancouver — Capilano Bridge, Stanley Park, and picking up the Porsche 911!',
+        3:  'You\'ll be driving the Sea-to-Sky Highway in a Porsche 911 Cabriolet with the top down!',
+        4:  'You\'ll be driving through the Rockies to Canmore with mountain views all around!',
+        5:  'You\'ll be hiking Johnston Canyon and soaking in the Banff Hot Springs!',
+        6:  'You\'ll be riding the Banff Gondola and dining at Sky Bistro at the summit!',
+        7:  'You\'ll be canoeing on Emerald Lake and chasing waterfalls in Yoho!',
+        8:  'You\'ll be at Lake Louise for sunrise — the most iconic view in Canada!',
+        9:  'You\'ll be having a well-deserved rest day in Field.',
+        10: 'You\'ll be at Moraine Lake, then driving the legendary Icefields Parkway — 3 jaw-drop viewpoints!',
+        11: 'You\'ll be walking on a glacier and standing under Athabasca Falls!',
+        12: 'You\'ll be cruising to Spirit Island on Maligne Lake and stargazing at Medicine Lake!',
+        13: 'You\'ll be soaking in Miette Hot Springs and watching sunset from Pyramid Island!',
+        14: 'You\'ll be hiking the Valley of the Five Lakes trail!',
+        15: 'You\'ll be enjoying a relaxing last day in Jasper.',
+        16: 'You\'ll be driving past Abraham Lake on your way to Calgary!',
+        17: 'You\'ll be flying to Montreal and driving to Quebec City — hello, French Canada!',
+        18: 'You\'ll be exploring Château Frontenac and the charming streets of Old Quebec!',
+        19: 'You\'ll be at the Mount Royal Lookout — the final jaw-dropping viewpoint!',
+        20: 'You\'ll be on a Montreal food crawl — St-Viateur bagels, Jean Talon Market, and Joe Beef!',
+        21: 'You\'ll be visiting the Botanical Garden before your evening flight home.',
+        22: 'You\'ll be transiting through Doha on your way back to Singapore.',
+    };
+
+    function updateTomorrow() {
+        const card = document.getElementById('tomorrow-card');
+        const content = document.getElementById('tomorrow-content');
+        const today = new Date().toISOString().split('T')[0];
+
+        // Find which trip day is today
+        let currentDay = null;
+        Object.entries(tripDates).forEach(([dayNum, date]) => {
+            if (date === today) currentDay = parseInt(dayNum);
+        });
+
+        if (currentDay && tomorrowActivities[currentDay]) {
+            card.style.display = '';
+            content.textContent = tomorrowActivities[currentDay];
+        } else {
+            card.style.display = 'none';
+        }
+    }
+
+    updateTomorrow();
 
 })();
