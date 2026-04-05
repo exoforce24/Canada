@@ -209,43 +209,43 @@
     animTargets.forEach(el => scrollObserver.observe(el));
 
     // ===== DAY CARD THUMBNAILS =====
-    // Unsplash source URLs (reliable direct image format)
+    // Using CSS gradients + emoji as reliable thumbnails (no external dependency)
     const dayThumbs = {
-        1: 'https://images.unsplash.com/photo-1609825488888-3a766db05542?w=800&h=240&fit=crop&crop=bottom', // Vancouver
-        2: 'https://images.unsplash.com/photo-1560813962-ff3d8fcf59ba?w=800&h=240&fit=crop', // Stanley Park
-        3: 'https://images.unsplash.com/photo-1568317547167-a0aae4c415a8?w=800&h=240&fit=crop', // Sea to Sky
-        4: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=800&h=240&fit=crop', // Calgary/Rockies
-        5: 'https://images.unsplash.com/photo-1561134643-668db4e3948e?w=800&h=240&fit=crop', // Banff
-        6: 'https://images.unsplash.com/photo-1561134643-668db4e3948e?w=800&h=240&fit=crop', // Banff
-        7: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=240&fit=crop', // Emerald Lake
-        8: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800&h=240&fit=crop', // Lake Louise
-        9: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=240&fit=crop', // Yoho
-        10: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&h=240&fit=crop', // Moraine/Icefields
-        11: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Athabasca
-        12: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
-        13: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
-        14: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
-        15: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
-        16: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=800&h=240&fit=crop', // Calgary drive
-        17: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
-        18: 'https://images.unsplash.com/photo-1545061400-95748ccc9cf7?w=800&h=240&fit=crop', // Quebec City
-        19: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
-        20: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
-        21: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
+        1:  { gradient: 'linear-gradient(135deg, #0d47a1, #00bcd4)', emoji: '✈️', label: 'Vancouver Arrival' },
+        2:  { gradient: 'linear-gradient(135deg, #00695c, #26a69a)', emoji: '🌲', label: 'Vancouver + Porsche' },
+        3:  { gradient: 'linear-gradient(135deg, #1565c0, #4fc3f7)', emoji: '🏔️', label: 'Sea-to-Sky Drive' },
+        4:  { gradient: 'linear-gradient(135deg, #33691e, #8bc34a)', emoji: '✈️', label: 'Fly to Calgary' },
+        5:  { gradient: 'linear-gradient(135deg, #1b5e20, #66bb6a)', emoji: '⛰️', label: 'Banff Day' },
+        6:  { gradient: 'linear-gradient(135deg, #1b5e20, #66bb6a)', emoji: '🚡', label: 'Banff Gondola' },
+        7:  { gradient: 'linear-gradient(135deg, #004d40, #80cbc4)', emoji: '🛶', label: 'Yoho National Park' },
+        8:  { gradient: 'linear-gradient(135deg, #0d47a1, #81d4fa)', emoji: '🌅', label: 'Lake Louise' },
+        9:  { gradient: 'linear-gradient(135deg, #3e2723, #8d6e63)', emoji: '😴', label: 'Recovery Day' },
+        10: { gradient: 'linear-gradient(135deg, #b71c1c, #d4a853)', emoji: '⭐', label: 'Moraine + Icefields' },
+        11: { gradient: 'linear-gradient(135deg, #1a237e, #5c6bc0)', emoji: '🧊', label: 'Glacier → Jasper' },
+        12: { gradient: 'linear-gradient(135deg, #004d40, #4db6ac)', emoji: '🚢', label: 'Maligne Lake' },
+        13: { gradient: 'linear-gradient(135deg, #e65100, #ffb74d)', emoji: '♨️', label: 'Hot Springs + SkyTram' },
+        14: { gradient: 'linear-gradient(135deg, #2e7d32, #a5d6a7)', emoji: '🥾', label: 'Five Lakes Trail' },
+        15: { gradient: 'linear-gradient(135deg, #37474f, #90a4ae)', emoji: '🧘', label: 'Relax Day' },
+        16: { gradient: 'linear-gradient(135deg, #4e342e, #a1887f)', emoji: '🚗', label: 'Drive to Calgary' },
+        17: { gradient: 'linear-gradient(135deg, #4a148c, #ce93d8)', emoji: '✈️', label: 'Fly to Montreal' },
+        18: { gradient: 'linear-gradient(135deg, #1a237e, #7c4dff)', emoji: '🏰', label: 'Quebec City' },
+        19: { gradient: 'linear-gradient(135deg, #880e4f, #e040fb)', emoji: '⛪', label: 'Montreal' },
+        20: { gradient: 'linear-gradient(135deg, #bf360c, #ff8a65)', emoji: '🥯', label: 'Montreal Food Day' },
+        21: { gradient: 'linear-gradient(135deg, #1a237e, #9575cd)', emoji: '🌸', label: 'Departure' },
+        22: { gradient: 'linear-gradient(135deg, #e65100, #ffcc02)', emoji: '🛫', label: 'Transit' },
+        23: { gradient: 'linear-gradient(135deg, #c62828, #ef5350)', emoji: '❤️', label: 'Home' },
     };
 
-    // Lazy-load thumbnails
-    Object.entries(dayThumbs).forEach(([dayNum, url]) => {
+    // Create gradient thumbnails (no external images — always works!)
+    Object.entries(dayThumbs).forEach(([dayNum, data]) => {
         const card = document.getElementById('day-' + dayNum);
         if (!card) return;
 
-        const img = document.createElement('img');
-        img.className = 'day-thumb';
-        img.loading = 'lazy';
-        img.alt = '';
-        img.src = url;
-        img.onerror = () => img.remove(); // Remove if image fails to load
-        card.insertBefore(img, card.firstChild);
+        const thumb = document.createElement('div');
+        thumb.className = 'day-thumb';
+        thumb.style.background = data.gradient;
+        thumb.innerHTML = `<span class="day-thumb-emoji">${data.emoji}</span><span class="day-thumb-label">${data.label}</span>`;
+        card.insertBefore(thumb, card.firstChild);
     });
 
     // ===== DARK SKY MAP OVERLAY =====
