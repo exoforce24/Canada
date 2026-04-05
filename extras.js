@@ -56,12 +56,25 @@
     // ===== LIVE WEATHER (Open-Meteo, free, no API key) =====
     async function fetchLiveWeather() {
         const currentDay = getCurrentTripDay();
-        if (!currentDay) return; // Only during trip
 
-        // Get weather for current day + next 2 days
-        const daysToFetch = [];
-        for (let d = currentDay; d <= Math.min(currentDay + 2, 23); d++) {
-            if (dayLocations[d]) daysToFetch.push(d);
+        // Before trip: show current weather for key destinations as preview
+        // During trip: show weather for current + next 2 days
+        let daysToFetch = [];
+        let previewMode = false;
+
+        if (currentDay) {
+            for (let d = currentDay; d <= Math.min(currentDay + 2, 23); d++) {
+                if (dayLocations[d]) daysToFetch.push(d);
+            }
+        } else {
+            // Preview mode — show current weather for key destinations
+            previewMode = true;
+            daysToFetch = []; // We'll fetch current weather for key cities instead
+        }
+
+        if (previewMode) {
+            await fetchPreviewWeather();
+            return;
         }
 
         if (daysToFetch.length === 0) return;
@@ -133,6 +146,50 @@
         }
 
         document.getElementById('weather-attribution').textContent = 'Weather data: Open-Meteo.com';
+    }
+
+    // Preview mode: show current weather for key destinations
+    async function fetchPreviewWeather() {
+        const grid = document.getElementById('weather-live-grid');
+        grid.innerHTML = '';
+
+        const previewCities = [
+            { lat: 49.28, lon: -123.12, name: 'Vancouver' },
+            { lat: 51.18, lon: -115.57, name: 'Banff' },
+            { lat: 52.87, lon: -118.08, name: 'Jasper' },
+            { lat: 45.51, lon: -73.59, name: 'Montreal' },
+        ];
+
+        for (const city of previewCities) {
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weathercode,windspeed_10m&timezone=auto`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (data.current) {
+                    const card = document.createElement('div');
+                    card.className = 'weather-live-card';
+                    card.innerHTML = `
+                        <div class="wl-header">
+                            <span class="wl-icon">${weatherCodeToEmoji(data.current.weathercode)}</span>
+                            <div>
+                                <div class="wl-title">Now in ${city.name}</div>
+                                <div class="wl-temp-big">${Math.round(data.current.temperature_2m)}°C</div>
+                            </div>
+                        </div>
+                        <div class="wl-detail">Wind: ${Math.round(data.current.windspeed_10m)} km/h</div>
+                    `;
+                    grid.appendChild(card);
+                }
+            } catch {}
+        }
+
+        if (grid.children.length === 0) {
+            grid.innerHTML = '<div class="weather-loading">Unable to fetch weather data</div>';
+        } else {
+            document.getElementById('weather-attribution').textContent =
+                'Live conditions at your destinations • Weather data: Open-Meteo.com';
+        }
     }
 
     function weatherCodeToEmoji(code) {

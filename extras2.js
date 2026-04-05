@@ -209,29 +209,29 @@
     animTargets.forEach(el => scrollObserver.observe(el));
 
     // ===== DAY CARD THUMBNAILS =====
-    // Free Unsplash images for each phase
+    // Unsplash source URLs (reliable direct image format)
     const dayThumbs = {
-        1: 'https://images.unsplash.com/photo-1559511260-66a654ae982a?w=600&h=200&fit=crop',
-        2: 'https://images.unsplash.com/photo-1559511260-66a654ae982a?w=600&h=200&fit=crop',
-        3: 'https://images.unsplash.com/photo-1533753325611-3b0a27c20458?w=600&h=200&fit=crop',
-        4: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=600&h=200&fit=crop',
-        5: 'https://images.unsplash.com/photo-1513273216459-54c4833d6840?w=600&h=200&fit=crop',
-        6: 'https://images.unsplash.com/photo-1513273216459-54c4833d6840?w=600&h=200&fit=crop',
-        7: 'https://images.unsplash.com/photo-1609825488888-3a766db05542?w=600&h=200&fit=crop',
-        8: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600&h=200&fit=crop',
-        9: 'https://images.unsplash.com/photo-1609825488888-3a766db05542?w=600&h=200&fit=crop',
-        10: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=200&fit=crop',
-        11: 'https://images.unsplash.com/photo-1570071905710-3dc9e1fbe498?w=600&h=200&fit=crop',
-        12: 'https://images.unsplash.com/photo-1570071905710-3dc9e1fbe498?w=600&h=200&fit=crop',
-        13: 'https://images.unsplash.com/photo-1570071905710-3dc9e1fbe498?w=600&h=200&fit=crop',
-        14: 'https://images.unsplash.com/photo-1570071905710-3dc9e1fbe498?w=600&h=200&fit=crop',
-        15: 'https://images.unsplash.com/photo-1570071905710-3dc9e1fbe498?w=600&h=200&fit=crop',
-        16: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=600&h=200&fit=crop',
-        17: 'https://images.unsplash.com/photo-1559511260-66a654ae982a?w=600&h=200&fit=crop',
-        18: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=200&fit=crop',
-        19: 'https://images.unsplash.com/photo-1535443809936-0436bd141065?w=600&h=200&fit=crop',
-        20: 'https://images.unsplash.com/photo-1535443809936-0436bd141065?w=600&h=200&fit=crop',
-        21: 'https://images.unsplash.com/photo-1535443809936-0436bd141065?w=600&h=200&fit=crop',
+        1: 'https://images.unsplash.com/photo-1609825488888-3a766db05542?w=800&h=240&fit=crop&crop=bottom', // Vancouver
+        2: 'https://images.unsplash.com/photo-1560813962-ff3d8fcf59ba?w=800&h=240&fit=crop', // Stanley Park
+        3: 'https://images.unsplash.com/photo-1568317547167-a0aae4c415a8?w=800&h=240&fit=crop', // Sea to Sky
+        4: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=800&h=240&fit=crop', // Calgary/Rockies
+        5: 'https://images.unsplash.com/photo-1561134643-668db4e3948e?w=800&h=240&fit=crop', // Banff
+        6: 'https://images.unsplash.com/photo-1561134643-668db4e3948e?w=800&h=240&fit=crop', // Banff
+        7: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=240&fit=crop', // Emerald Lake
+        8: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800&h=240&fit=crop', // Lake Louise
+        9: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=240&fit=crop', // Yoho
+        10: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&h=240&fit=crop', // Moraine/Icefields
+        11: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Athabasca
+        12: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
+        13: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
+        14: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
+        15: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=800&h=240&fit=crop', // Jasper
+        16: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=800&h=240&fit=crop', // Calgary drive
+        17: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
+        18: 'https://images.unsplash.com/photo-1545061400-95748ccc9cf7?w=800&h=240&fit=crop', // Quebec City
+        19: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
+        20: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
+        21: 'https://images.unsplash.com/photo-1519178614-68673b201f36?w=800&h=240&fit=crop', // Montreal
     };
 
     // Lazy-load thumbnails
@@ -244,6 +244,7 @@
         img.loading = 'lazy';
         img.alt = '';
         img.src = url;
+        img.onerror = () => img.remove(); // Remove if image fails to load
         card.insertBefore(img, card.firstChild);
     });
 
