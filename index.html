@@ -931,6 +931,76 @@
     </div>
 </section>
 
+<!-- Aurora Monitor -->
+<section class="section aurora-section" id="aurora">
+    <div class="container">
+        <h2 class="section-title">&#129321; Aurora Monitor</h2>
+        <p class="section-subtitle">Live data from NOAA Space Weather &mdash; refreshes every 15 minutes</p>
+
+        <div class="aurora-main-card">
+            <div class="aurora-gauge-container">
+                <div class="aurora-kp-ring" id="aurora-kp-ring">
+                    <div class="aurora-kp-value" id="aurora-kp-value">--</div>
+                    <div class="aurora-kp-label">Kp Index</div>
+                </div>
+            </div>
+            <div class="aurora-status">
+                <div class="aurora-status-text" id="aurora-status">Loading aurora data...</div>
+                <div class="aurora-updated" id="aurora-updated"></div>
+            </div>
+        </div>
+
+        <div class="aurora-locations-grid">
+            <div class="aurora-loc-card" id="aurora-jasper">
+                <div class="aurora-loc-header">
+                    <span class="aurora-loc-name">Jasper (52.9&deg;N)</span>
+                    <span class="aurora-loc-days">Days 11-15</span>
+                </div>
+                <div class="aurora-loc-bar-container">
+                    <div class="aurora-loc-bar" id="aurora-bar-jasper"></div>
+                </div>
+                <div class="aurora-loc-chance" id="aurora-chance-jasper">--</div>
+                <div class="aurora-loc-note">Best spot on your trip &mdash; Jasper Dark Sky Preserve, minimal light pollution</div>
+            </div>
+            <div class="aurora-loc-card" id="aurora-banff">
+                <div class="aurora-loc-header">
+                    <span class="aurora-loc-name">Banff / Lake Louise (51.2&deg;N)</span>
+                    <span class="aurora-loc-days">Days 5-10</span>
+                </div>
+                <div class="aurora-loc-bar-container">
+                    <div class="aurora-loc-bar" id="aurora-bar-banff"></div>
+                </div>
+                <div class="aurora-loc-chance" id="aurora-chance-banff">--</div>
+                <div class="aurora-loc-note">Vermilion Lakes &amp; Lake Minnewanka are top aurora spots</div>
+            </div>
+            <div class="aurora-loc-card" id="aurora-icefields">
+                <div class="aurora-loc-header">
+                    <span class="aurora-loc-name">Columbia Icefield (52.2&deg;N)</span>
+                    <span class="aurora-loc-days">Day 10</span>
+                </div>
+                <div class="aurora-loc-bar-container">
+                    <div class="aurora-loc-bar" id="aurora-bar-icefields"></div>
+                </div>
+                <div class="aurora-loc-chance" id="aurora-chance-icefields">--</div>
+                <div class="aurora-loc-note">Zero light pollution &mdash; if Kp is high, this is your best chance</div>
+            </div>
+        </div>
+
+        <div class="aurora-tips-card">
+            <h4>&#128161; Aurora Viewing Tips</h4>
+            <div class="aurora-tips-list">
+                <div class="aurora-tip">Look <strong>north</strong> with a clear horizon &mdash; low northern sky</div>
+                <div class="aurora-tip">Best time: <strong>11 PM &ndash; 3 AM</strong> (darkest hours)</div>
+                <div class="aurora-tip">Kp 3+ = possible on horizon at your latitude</div>
+                <div class="aurora-tip">Kp 5+ = good show likely overhead</div>
+                <div class="aurora-tip">Kp 7+ = spectacular &mdash; drop everything and look up!</div>
+                <div class="aurora-tip">Your phone camera sees auroras better than your eyes &mdash; try a long exposure</div>
+                <div class="aurora-tip">Check this page during your Rockies nights (Days 5-15) for real-time updates</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Stargazing Guide -->
 <section class="section stargazing-section" id="stargazing">
     <div class="container">
@@ -1082,6 +1152,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="map.js"></script>
+<script src="aurora.js"></script>
 <script src="app.js"></script>
 <script>
 // Register service worker for offline support

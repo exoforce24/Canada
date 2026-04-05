@@ -1194,6 +1194,217 @@ body {
     padding: 4px 0;
 }
 
+/* ========== AURORA MONITOR ========== */
+.aurora-section {
+    background: linear-gradient(180deg, #0a0a0f 0%, #0a100a 50%, #0a0a0f 100%);
+}
+
+.aurora-main-card {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    max-width: 600px;
+    margin: 0 auto 24px;
+}
+
+@media (max-width: 480px) {
+    .aurora-main-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px;
+        gap: 16px;
+    }
+}
+
+.aurora-gauge-container {
+    flex-shrink: 0;
+}
+
+.aurora-kp-ring {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.5s, box-shadow 0.5s;
+}
+
+.aurora-kp-ring.kp-low {
+    border-color: #555;
+}
+
+.aurora-kp-ring.kp-moderate {
+    border-color: #66bb6a;
+    box-shadow: 0 0 20px rgba(102,187,106,0.2);
+}
+
+.aurora-kp-ring.kp-active {
+    border-color: #ffa726;
+    box-shadow: 0 0 25px rgba(255,167,38,0.3);
+}
+
+.aurora-kp-ring.kp-storm {
+    border-color: #ef5350;
+    box-shadow: 0 0 30px rgba(239,83,80,0.3);
+}
+
+.aurora-kp-ring.kp-extreme {
+    border-color: #e040fb;
+    box-shadow: 0 0 35px rgba(224,64,251,0.4);
+    animation: aurora-pulse 2s ease infinite;
+}
+
+@keyframes aurora-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(224,64,251,0.3); }
+    50% { box-shadow: 0 0 40px rgba(102,187,106,0.4); }
+}
+
+.aurora-kp-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1;
+}
+
+.aurora-kp-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.aurora-status {
+    flex: 1;
+}
+
+.aurora-status-text {
+    font-size: 1.1rem;
+    color: var(--text-bright);
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.aurora-updated {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+/* Aurora location cards */
+.aurora-locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto 24px;
+}
+
+.aurora-loc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.aurora-loc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.aurora-loc-name {
+    font-weight: 600;
+    color: var(--text-bright);
+    font-size: 0.9rem;
+}
+
+.aurora-loc-days {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+}
+
+.aurora-loc-bar-container {
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.aurora-loc-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #66bb6a, #ffa726, #ef5350, #e040fb);
+    transition: width 0.8s ease;
+}
+
+.aurora-loc-chance {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+}
+
+.aurora-loc-note {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+}
+
+/* Aurora tips */
+.aurora-tips-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.aurora-tips-card h4 {
+    color: var(--text-bright);
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.aurora-tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.aurora-tip {
+    font-size: 0.8rem;
+    color: var(--text);
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.aurora-tip::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #66bb6a;
+}
+
+.aurora-tip strong {
+    color: var(--text-bright);
+}
+
 /* ========== STARGAZING ========== */
 .stargazing-section {
     background: var(--bg-card);
