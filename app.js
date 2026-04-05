@@ -356,7 +356,11 @@
         { id: 'aurora', label: 'Aurora' },
         { id: 'stargazing', label: 'Stars' },
         { id: 'driving', label: 'Drives' },
+        { id: 'gas-stations', label: 'Gas' },
+        { id: 'offline-maps', label: 'Offline' },
         { id: 'tips', label: 'Tips' },
+        { id: 'live-weather', label: 'Wx Live' },
+        { id: 'trip-summary', label: 'Summary' },
     ];
 
     sections.forEach(s => {

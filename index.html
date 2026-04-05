@@ -34,6 +34,27 @@
         <p class="countdown-label" id="countdown-label">until takeoff</p>
     </div>
     <div class="scroll-hint" aria-hidden="true">&darr;</div>
+    <!-- Route Progress (visible during trip) -->
+    <div class="route-progress" id="route-progress">
+        <div class="route-line">
+            <div class="route-stops">
+                <span class="route-stop" data-day="1" title="Vancouver">YVR</span>
+                <span class="route-stop" data-day="4" title="Calgary">YYC</span>
+                <span class="route-stop" data-day="5" title="Banff">BNF</span>
+                <span class="route-stop" data-day="7" title="Yoho">YHO</span>
+                <span class="route-stop" data-day="10" title="Icefields">ICE</span>
+                <span class="route-stop" data-day="11" title="Jasper">JSP</span>
+                <span class="route-stop" data-day="16" title="Calgary">YYC</span>
+                <span class="route-stop" data-day="17" title="Montreal">YUL</span>
+                <span class="route-stop" data-day="18" title="Quebec City">QC</span>
+                <span class="route-stop" data-day="21" title="Home">SIN</span>
+            </div>
+            <div class="route-track">
+                <div class="route-filled" id="route-filled"></div>
+                <div class="route-car" id="route-car">&#128663;</div>
+            </div>
+        </div>
+    </div>
 </header>
 
 <!-- Trip Stats Bar -->
@@ -1145,6 +1166,139 @@
     </div>
 </section>
 
+<!-- Live Weather (visible during trip) -->
+<section class="section weather-live-section" id="live-weather">
+    <div class="container">
+        <h2 class="section-title">&#127780;&#65039; Live Weather</h2>
+        <p class="section-subtitle">Current conditions &amp; 3-day forecast for your location</p>
+        <div class="weather-live-grid" id="weather-live-grid">
+            <div class="weather-loading">Loading weather data...</div>
+        </div>
+        <p class="weather-attribution" id="weather-attribution"></p>
+    </div>
+</section>
+
+<!-- Gas Stations - Icefields Parkway -->
+<section class="section gas-section" id="gas-stations">
+    <div class="container">
+        <h2 class="section-title">&#9981;&#65039; Gas Stations &mdash; Icefields Parkway</h2>
+        <p class="section-subtitle">Fuel up! Very limited stations on this 230 km stretch</p>
+        <div class="gas-warning">&#9888;&#65039; IMPORTANT: Fill up before starting the Icefields Parkway. The stretch between Saskatchewan Crossing and Jasper has NO gas stations (130 km).</div>
+        <div class="gas-timeline">
+            <div class="gas-station">
+                <div class="gas-dot gas-major"></div>
+                <div class="gas-info">
+                    <h4>Lake Louise Village</h4>
+                    <p>Petro-Canada &bull; Last major station before the Parkway</p>
+                    <span class="gas-tag">&#9989; Fill up here (Day 10, ~3 PM)</span>
+                </div>
+            </div>
+            <div class="gas-station">
+                <div class="gas-dot gas-minor"></div>
+                <div class="gas-info">
+                    <h4>Saskatchewan River Crossing</h4>
+                    <p>The Crossing Resort &bull; 77 km from Lake Louise</p>
+                    <span class="gas-tag">Only gas for 130 km &mdash; top up if below half tank</span>
+                </div>
+            </div>
+            <div class="gas-station">
+                <div class="gas-dot gas-none"></div>
+                <div class="gas-info">
+                    <h4>Columbia Icefield &rarr; Jasper</h4>
+                    <p>No gas stations on this 130 km stretch</p>
+                    <span class="gas-tag gas-tag-warn">&#9888;&#65039; No fuel available</span>
+                </div>
+            </div>
+            <div class="gas-station">
+                <div class="gas-dot gas-major"></div>
+                <div class="gas-info">
+                    <h4>Jasper Town</h4>
+                    <p>Petro-Canada &bull; Shell &bull; Multiple stations</p>
+                    <span class="gas-tag">&#9989; Refuel when you arrive</span>
+                </div>
+            </div>
+        </div>
+        <div class="gas-other">
+            <h4>Other Key Fuel Stops</h4>
+            <div class="gas-other-grid">
+                <div class="gas-mini"><strong>Canmore</strong> &mdash; Fill before entering parks (Day 4)</div>
+                <div class="gas-mini"><strong>Banff</strong> &mdash; Petro-Canada in town</div>
+                <div class="gas-mini"><strong>Field (Yoho)</strong> &mdash; Small station, limited hours</div>
+                <div class="gas-mini"><strong>Hinton</strong> &mdash; Multiple stations near Jasper (Day 11+)</div>
+                <div class="gas-mini"><strong>Rocky Mountain House</strong> &mdash; Last stop before Abraham Lake (Day 16)</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Offline Maps Checklist -->
+<section class="section offline-maps-section" id="offline-maps">
+    <div class="container">
+        <h2 class="section-title">&#128246; Offline Maps to Download</h2>
+        <p class="section-subtitle">Download these Google Maps areas before the trip &mdash; signal is unreliable in the mountains</p>
+        <div class="offline-maps-grid">
+            <div class="offline-map-card">
+                <h4>&#128205; Vancouver &amp; Sea-to-Sky</h4>
+                <p>Days 1-3</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-1"><span>Vancouver city</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-2"><span>Sea-to-Sky Highway &rarr; Whistler</span></label>
+            </div>
+            <div class="offline-map-card">
+                <h4>&#128205; Banff &amp; Canmore</h4>
+                <p>Days 4-6</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-3"><span>Calgary &rarr; Canmore &rarr; Banff</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-4"><span>Lake Minnewanka area</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-5"><span>Johnston Canyon / Bow Valley Pkwy</span></label>
+            </div>
+            <div class="offline-map-card">
+                <h4>&#128205; Yoho &amp; Lake Louise</h4>
+                <p>Days 7-9</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-6"><span>Field / Emerald Lake / Takakkaw</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-7"><span>Lake Louise &amp; Moraine Lake</span></label>
+            </div>
+            <div class="offline-map-card critical">
+                <h4>&#128205; Icefields Parkway &#9888;&#65039;</h4>
+                <p>Day 10 &mdash; CRITICAL, no signal for most of this drive</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-8"><span>Lake Louise &rarr; Columbia Icefield</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-9"><span>Columbia Icefield &rarr; Jasper</span></label>
+            </div>
+            <div class="offline-map-card">
+                <h4>&#128205; Jasper Area</h4>
+                <p>Days 11-15</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-10"><span>Jasper town &amp; surrounds</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-11"><span>Maligne Lake &amp; Canyon</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-12"><span>Miette Hot Springs area</span></label>
+            </div>
+            <div class="offline-map-card">
+                <h4>&#128205; Jasper &rarr; Calgary</h4>
+                <p>Day 16</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-13"><span>Hwy 11 via Abraham Lake</span></label>
+            </div>
+            <div class="offline-map-card">
+                <h4>&#128205; Quebec &amp; Montreal</h4>
+                <p>Days 17-21</p>
+                <label class="check-item"><input type="checkbox" data-id="omap-14"><span>Montreal &rarr; Quebec City (Hwy 20)</span></label>
+                <label class="check-item"><input type="checkbox" data-id="omap-15"><span>Montreal city</span></label>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trip Summary (post-trip) -->
+<section class="section summary-section" id="trip-summary">
+    <div class="container">
+        <h2 class="section-title">&#128220; Trip Summary</h2>
+        <p class="section-subtitle">Your honeymoon at a glance</p>
+        <div class="summary-stats" id="summary-stats"></div>
+        <div class="summary-highlights" id="summary-highlights"></div>
+        <div class="summary-notes" id="summary-notes"></div>
+        <button class="summary-btn" id="generate-summary">Generate Trip Summary</button>
+    </div>
+</section>
+
+<!-- Confetti Canvas -->
+<canvas id="confetti-canvas"></canvas>
+
 <!-- Footer -->
 <footer class="footer">
     <p>Made with &#10084;&#65039; for the honeymoon of a lifetime</p>
@@ -1154,6 +1308,7 @@
 <script src="map.js"></script>
 <script src="aurora.js"></script>
 <script src="app.js"></script>
+<script src="extras.js"></script>
 <script>
 // Register service worker for offline support
 if ('serviceWorker' in navigator) {
