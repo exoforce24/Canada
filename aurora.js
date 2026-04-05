@@ -5,9 +5,12 @@
 (function () {
     'use strict';
 
-    // NOAA Space Weather API - free, no key needed
-    const KP_URL = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
-    const FORECAST_URL = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json';
+    // Multiple NOAA endpoints to try (in order of preference)
+    const ENDPOINTS = [
+        'https://services.swpc.noaa.gov/json/planetary_k_index_1m.json',
+        'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json',
+        'https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json',
+    ];
 
     // Minimum Kp for aurora visibility at each latitude
     const locations = {
@@ -15,6 +18,8 @@
         banff:     { lat: 51.2, minKp: 4, goodKp: 5 },
         icefields: { lat: 52.2, minKp: 3, goodKp: 5 },
     };
+
+    const CACHE_KEY = 'canada-honeymoon-aurora';
 
     function getKpClass(kp) {
         if (kp >= 7) return 'kp-extreme';
@@ -45,7 +50,6 @@
     }
 
     function getChancePercent(kp, loc) {
-        // Rough probability mapping
         const diff = kp - loc.minKp;
         if (diff >= 4) return 95;
         if (diff >= 3) return 80;
@@ -56,18 +60,19 @@
         return 3;
     }
 
-    function updateAuroraUI(kp) {
-        // Main gauge
+    function updateAuroraUI(kp, source) {
         const ring = document.getElementById('aurora-kp-ring');
         const value = document.getElementById('aurora-kp-value');
         const status = document.getElementById('aurora-status');
         const updated = document.getElementById('aurora-updated');
 
-        // Remove old classes
         ring.className = 'aurora-kp-ring ' + getKpClass(kp);
         value.textContent = kp.toFixed(1);
         status.textContent = getStatusText(kp);
-        updated.textContent = 'Updated: ' + new Date().toLocaleTimeString();
+
+        const timeStr = new Date().toLocaleTimeString();
+        const sourceLabel = source === 'cache' ? ' (cached)' : '';
+        updated.textContent = 'Updated: ' + timeStr + sourceLabel;
 
         // Location cards
         Object.entries(locations).forEach(([key, loc]) => {
@@ -79,50 +84,79 @@
             bar.style.width = pct + '%';
             chance.textContent = text + ' (' + pct + '%)';
 
-            // Color the chance text
             if (pct >= 60) chance.style.color = '#66bb6a';
             else if (pct >= 30) chance.style.color = '#ffa726';
             else chance.style.color = 'var(--text-dim)';
         });
+
+        // Cache the result
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ kp, time: Date.now() }));
+        } catch {}
+    }
+
+    // Parse Kp from different NOAA response formats
+    function parseKpFromData(data, url) {
+        if (!data || !Array.isArray(data) || data.length < 2) return null;
+
+        // Format 1: planetary_k_index_1m.json — array of objects with kp_index
+        if (data[0] && typeof data[0] === 'object' && 'kp_index' in data[0]) {
+            const latest = data[data.length - 1];
+            const kp = parseFloat(latest.kp_index);
+            return isNaN(kp) ? null : kp;
+        }
+
+        // Format 2: noaa-planetary-k-index.json — array of arrays, header row first
+        if (Array.isArray(data[0])) {
+            const latest = data[data.length - 1];
+            const kp = parseFloat(latest[1]);
+            return isNaN(kp) ? null : kp;
+        }
+
+        return null;
     }
 
     async function fetchAuroraData() {
-        try {
-            const response = await fetch(KP_URL);
-            const data = await response.json();
+        // Try each endpoint
+        for (const url of ENDPOINTS) {
+            try {
+                const response = await fetch(url, {
+                    mode: 'cors',
+                    cache: 'no-cache',
+                });
 
-            // Data format: array of arrays, first row is headers
-            // Get the latest reading (last row)
-            if (data && data.length > 1) {
-                const latest = data[data.length - 1];
-                // Column 1 is Kp value
-                const kp = parseFloat(latest[1]);
-                if (!isNaN(kp)) {
-                    updateAuroraUI(kp);
+                if (!response.ok) continue;
+
+                const data = await response.json();
+                const kp = parseKpFromData(data, url);
+
+                if (kp !== null) {
+                    updateAuroraUI(kp, 'live');
                     return;
                 }
+            } catch {
+                // Try next endpoint
+                continue;
             }
-
-            // Fallback: try forecast
-            const forecastResp = await fetch(FORECAST_URL);
-            const forecastData = await forecastResp.json();
-            if (forecastData && forecastData.length > 1) {
-                const latest = forecastData[forecastData.length - 1];
-                const kp = parseFloat(latest[1]);
-                if (!isNaN(kp)) {
-                    updateAuroraUI(kp);
-                    return;
-                }
-            }
-
-            throw new Error('No data');
-        } catch {
-            // Offline or API error — show last known or default
-            document.getElementById('aurora-status').textContent =
-                '📡 Unable to fetch live data — check back when online';
-            document.getElementById('aurora-updated').textContent =
-                'Last attempt: ' + new Date().toLocaleTimeString();
         }
+
+        // All endpoints failed — try cached data
+        try {
+            const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+            if (cached && cached.kp !== undefined) {
+                const ageMinutes = Math.round((Date.now() - cached.time) / 60000);
+                updateAuroraUI(cached.kp, 'cache');
+                document.getElementById('aurora-updated').textContent =
+                    'Cached data (' + ageMinutes + ' min ago) — live update failed';
+                return;
+            }
+        } catch {}
+
+        // Absolute fallback
+        document.getElementById('aurora-status').textContent =
+            '📡 Unable to fetch live data — check back when online';
+        document.getElementById('aurora-updated').textContent =
+            'Last attempt: ' + new Date().toLocaleTimeString();
     }
 
     // Fetch on load
