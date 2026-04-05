@@ -359,6 +359,10 @@
         { id: 'gas-stations', label: 'Gas' },
         { id: 'offline-maps', label: 'Offline' },
         { id: 'tips', label: 'Tips' },
+        { id: 'currency', label: 'FX' },
+        { id: 'wear-today', label: 'Wear' },
+        { id: 'emergency', label: 'SOS' },
+        { id: 'parking', label: 'Park' },
         { id: 'live-weather', label: 'Wx Live' },
         { id: 'trip-summary', label: 'Summary' },
     ];

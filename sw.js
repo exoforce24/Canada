@@ -1,6 +1,6 @@
 /* Service Worker for offline support */
 
-const CACHE_NAME = 'canada-honeymoon-v4';
+const CACHE_NAME = 'canada-honeymoon-v5';
 const ASSETS = [
     './',
     './index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
     './map.js',
     './aurora.js',
     './extras.js',
+    './extras2.js',
 ];
 
 // External resources to cache

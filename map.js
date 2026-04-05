@@ -177,7 +177,7 @@
     }
 
     // Initialize map
-    const map = L.map('trip-map', {
+    const map = window._honeymoonMap = L.map('trip-map', {
         zoomControl: true,
         scrollWheelZoom: true,
     }).setView([52.0, -110.0], 4);

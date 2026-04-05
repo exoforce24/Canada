@@ -97,6 +97,7 @@
             <button class="map-filter" data-filter="dining">&#127860; Dining</button>
             <button class="map-filter" data-filter="hike">&#129406; Hikes</button>
             <button class="map-filter" data-filter="flight">&#9992;&#65039; Flights</button>
+            <button class="map-filter" data-filter="darksky" id="darksky-toggle">&#127769; Dark Sky</button>
         </div>
     </div>
     <div id="trip-map"></div>
@@ -1166,6 +1167,142 @@
     </div>
 </section>
 
+<!-- Currency Converter -->
+<section class="section currency-section" id="currency">
+    <div class="container">
+        <h2 class="section-title">&#128178; Currency Converter</h2>
+        <div class="currency-card">
+            <div class="currency-row">
+                <div class="currency-input-group">
+                    <label>SGD</label>
+                    <input type="number" id="sgd-input" placeholder="0.00" inputmode="decimal">
+                </div>
+                <span class="currency-arrow">&#8596;</span>
+                <div class="currency-input-group">
+                    <label>CAD</label>
+                    <input type="number" id="cad-input" placeholder="0.00" inputmode="decimal">
+                </div>
+            </div>
+            <div class="currency-rate" id="currency-rate">Loading rate...</div>
+            <div class="currency-quick">
+                <span class="currency-chip" data-sgd="10">$10</span>
+                <span class="currency-chip" data-sgd="20">$20</span>
+                <span class="currency-chip" data-sgd="50">$50</span>
+                <span class="currency-chip" data-sgd="100">$100</span>
+                <span class="currency-chip" data-sgd="200">$200</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What to Wear Today -->
+<section class="section wear-section" id="wear-today">
+    <div class="container">
+        <h2 class="section-title">&#128090; What to Wear Today</h2>
+        <div class="wear-card" id="wear-card">
+            <div class="wear-loading">Checking today's activities and weather...</div>
+        </div>
+    </div>
+</section>
+
+<!-- Emergency Quick Dial -->
+<section class="section emergency-section" id="emergency">
+    <div class="container">
+        <h2 class="section-title">&#128680; Emergency Quick Dial</h2>
+        <div class="emergency-grid">
+            <a href="tel:911" class="emergency-btn emergency-red">
+                <span class="emergency-icon">&#128680;</span>
+                <span class="emergency-label">911</span>
+                <span class="emergency-desc">Canada Emergency</span>
+            </a>
+            <a href="tel:+16132412043" class="emergency-btn emergency-blue">
+                <span class="emergency-icon">&#127468;&#127475;</span>
+                <span class="emergency-label">Embassy</span>
+                <span class="emergency-desc">SG Embassy Ottawa</span>
+            </a>
+            <a href="tel:*4357" class="emergency-btn emergency-orange">
+                <span class="emergency-icon">&#128663;</span>
+                <span class="emergency-label">*HELP</span>
+                <span class="emergency-desc">Roadside Assist (AB)</span>
+            </a>
+            <a href="tel:511" class="emergency-btn emergency-teal">
+                <span class="emergency-icon">&#127956;</span>
+                <span class="emergency-label">511</span>
+                <span class="emergency-desc">Road Conditions</span>
+            </a>
+            <a href="tel:1-877-852-3100" class="emergency-btn emergency-green">
+                <span class="emergency-icon">&#127795;</span>
+                <span class="emergency-label">Parks</span>
+                <span class="emergency-desc">Parks Canada Emergency</span>
+            </a>
+            <a href="tel:+18884074747" class="emergency-btn emergency-purple">
+                <span class="emergency-icon">&#128156;</span>
+                <span class="emergency-label">Poison</span>
+                <span class="emergency-desc">Poison Control</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Parking Tips -->
+<section class="section parking-section" id="parking">
+    <div class="container">
+        <h2 class="section-title">&#127359;&#65039; Parking Tips</h2>
+        <div class="parking-grid">
+            <div class="parking-card parking-warn">
+                <h4>Moraine Lake &#9888;&#65039;</h4>
+                <p class="parking-day">Day 10</p>
+                <p><strong>NO public parking.</strong> Must take Parks Canada shuttle from Lake Louise. You have 11:30 AM shuttle booked. Park at Lake Louise overflow lot.</p>
+            </div>
+            <div class="parking-card parking-warn">
+                <h4>Lake Louise</h4>
+                <p class="parking-day">Day 8 &amp; 10</p>
+                <p>Lot fills by <strong>6 AM in summer</strong>. Your 3:45 AM wake-up should get you a spot. Overflow lot available. $21/day.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Johnston Canyon</h4>
+                <p class="parking-day">Day 5</p>
+                <p>Arrive before 10 AM. Main lot fills fast. Overflow lot 1 km east on Bow Valley Parkway. Free.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Capilano Suspension Bridge</h4>
+                <p class="parking-day">Day 2</p>
+                <p>Free parking on-site, large lot. Rarely an issue. Arrive by 9 AM to beat crowds.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Stanley Park</h4>
+                <p class="parking-day">Day 2</p>
+                <p>Multiple paid lots. Use EasyPark app. $3.50/hr or ~$13/day. Prospect Point lot for e-bike start.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Emerald Lake</h4>
+                <p class="parking-day">Day 7</p>
+                <p>Small lot fills by 10 AM on weekends. Your 9:30 AM canoe should be fine on a weekday. Free.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Peyto Lake</h4>
+                <p class="parking-day">Day 10</p>
+                <p>New parking lot with $21 day pass (Parks pass may cover it). Short walk to viewpoint.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Maligne Lake</h4>
+                <p class="parking-day">Day 12</p>
+                <p>Large free lot. Fills for Spirit Island cruises. Arrive 15 min before your cruise time.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Takakkaw Falls</h4>
+                <p class="parking-day">Day 7</p>
+                <p>Road has tight switchbacks &mdash; no trailers. BMW 3 Series will be fine. Free lot at the falls.</p>
+            </div>
+            <div class="parking-card">
+                <h4>Old Montreal / Quebec</h4>
+                <p class="parking-day">Days 17-20</p>
+                <p>Street parking is tricky. Use Indigo lots ($15-25/day). Hotel parking if available. Download P$ app.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Live Weather (visible during trip) -->
 <section class="section weather-live-section" id="live-weather">
     <div class="container">
@@ -1309,6 +1446,7 @@
 <script src="aurora.js"></script>
 <script src="app.js"></script>
 <script src="extras.js"></script>
+<script src="extras2.js"></script>
 <script>
 // Register service worker for offline support
 if ('serviceWorker' in navigator) {
