@@ -1239,6 +1239,24 @@ body {
     padding: 4px 0;
 }
 
+.must-try-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--text-bright);
+    text-align: center;
+    margin: 32px 0 16px;
+}
+
+.reservation-card.must-try {
+    border-color: rgba(102,187,106,0.25);
+    background: linear-gradient(135deg, var(--bg-card), rgba(102,187,106,0.03));
+}
+
+.must-try .res-priority {
+    background: rgba(102,187,106,0.15);
+    color: #66bb6a;
+}
+
 /* ========== AURORA MONITOR ========== */
 .aurora-section {
     background: linear-gradient(180deg, #0a0a0f 0%, #0a100a 50%, #0a0a0f 100%);
