@@ -15,10 +15,15 @@
         { lat: 49.2844, lng: -123.1046, name: 'Gastown', day: 2, date: 'May 24', phase: 'vancouver', type: 'activity', desc: 'Afternoon walk' },
         { lat: 49.2766, lng: -123.2220, name: 'Spanish Banks', day: 2, date: 'May 24', phase: 'vancouver', type: 'activity', desc: 'Sunset drive in Porsche 911' },
         { lat: 49.2757, lng: -123.1469, name: 'Blue Water Cafe', day: 2, date: 'May 24', phase: 'vancouver', type: 'dining', desc: 'Dinner' },
-        { lat: 49.3749, lng: -123.2905, name: 'Whytecliff Park', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Sea-to-Sky stop' },
-        { lat: 49.5584, lng: -123.2383, name: 'Porteau Cove', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Sea-to-Sky stop' },
-        { lat: 49.6745, lng: -123.1558, name: 'Sea-to-Sky Gondola', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Squamish' },
+        { lat: 49.3749, lng: -123.2905, name: 'Whytecliff Park', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Rocky lookout, turquoise water' },
+        { lat: 49.3694, lng: -123.2727, name: 'Horseshoe Bay', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Sea-to-Sky start — ferry terminal viewpoint' },
+        { lat: 49.5584, lng: -123.2383, name: 'Porteau Cove', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Old shipwrecks, mountain backdrop' },
+        { lat: 49.6377, lng: -123.1540, name: 'Shannon Falls', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: '335m waterfall — 5 min walk from parking' },
+        { lat: 49.6745, lng: -123.1558, name: 'Sea-to-Sky Gondola', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Summit trails & suspension bridge' },
+        { lat: 49.6895, lng: -123.1557, name: 'Stawamus Chief', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Iconic granite monolith — viewpoint from gondola' },
+        { lat: 50.0388, lng: -123.1250, name: 'Brandywine Falls', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: '70m waterfall — easy 15 min trail' },
         { lat: 50.1163, lng: -122.9574, name: 'Araxi (Whistler)', day: 3, date: 'May 25', phase: 'vancouver', type: 'dining', desc: 'Lunch in Whistler' },
+        { lat: 50.1145, lng: -122.9571, name: 'Whistler Village', day: 3, date: 'May 25', phase: 'vancouver', type: 'activity', desc: 'Olympic Plaza & village stroll' },
 
         // ROCKIES - CANMORE/BANFF (Days 4-6)
         { lat: 51.0884, lng: -115.3579, name: 'Canmore', day: 4, date: 'May 26', phase: 'rockies', type: 'stay', desc: 'Drive from Calgary' },
