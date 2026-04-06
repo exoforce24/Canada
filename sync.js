@@ -6,6 +6,16 @@
 (function () {
     'use strict';
 
+    // Guard: if Firebase SDK didn't load, skip entirely (site still works without sync)
+    if (typeof firebase === 'undefined') {
+        console.warn('Firebase SDK not loaded — sync disabled, site works offline only');
+        var bar = document.getElementById('sync-bar');
+        if (bar) bar.style.display = 'none';
+        return;
+    }
+
+    try {
+
     // Firebase config
     const firebaseConfig = {
         apiKey: "AIzaSyCl1Mbw7RGCYX7SL_AwBndffEcmmKm59vg",
@@ -240,5 +250,11 @@
         pushNotes,
         isApplyingRemote: () => applyingRemote,
     };
+
+    } catch (err) {
+        console.warn('Firebase sync failed to initialize:', err);
+        var bar = document.getElementById('sync-bar');
+        if (bar) bar.style.display = 'none';
+    }
 
 })();
