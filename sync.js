@@ -83,13 +83,22 @@
 
     // ===== CHECKLIST SYNC =====
 
-    // Push local checklist to Firebase
+    // Push local checklist to Firebase (merge, never overwrite)
     function pushChecklist() {
         if (applyingRemote) return;
         try {
             const data = JSON.parse(localStorage.getItem(CHECKLIST_KEY)) || {};
-            checklistRef.set(data);
+            // Use update() instead of set() to merge, not overwrite
+            if (Object.keys(data).length > 0) {
+                checklistRef.update(data);
+            }
         } catch {}
+    }
+
+    // Remove a single checklist item from Firebase when unchecked
+    function removeChecklistItem(id) {
+        if (applyingRemote) return;
+        checklistRef.child(id).remove();
     }
 
     // Apply remote checklist to local + UI
@@ -97,14 +106,25 @@
         if (!data) data = {};
         applyingRemote = true;
 
-        // Save to localStorage
-        localStorage.setItem(CHECKLIST_KEY, JSON.stringify(data));
+        // Merge remote into local (remote wins for conflicts)
+        const local = JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}');
+        const merged = { ...local, ...data };
+
+        // Remove items that are in local but explicitly removed from remote
+        // (items that exist locally but not remotely were unchecked remotely)
+        Object.keys(merged).forEach(key => {
+            if (local[key] && !data[key]) {
+                delete merged[key];
+            }
+        });
+
+        localStorage.setItem(CHECKLIST_KEY, JSON.stringify(merged));
 
         // Update all checkboxes in the DOM
         document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
             const id = cb.dataset.id;
             if (!id) return;
-            const shouldBeChecked = !!data[id];
+            const shouldBeChecked = !!merged[id];
             if (cb.checked !== shouldBeChecked) {
                 cb.checked = shouldBeChecked;
             }
@@ -122,15 +142,25 @@
         if (applyingRemote) return;
         try {
             const data = JSON.parse(localStorage.getItem(NOTES_KEY)) || {};
-            notesRef.set(data);
+            if (Object.keys(data).length > 0) {
+                notesRef.update(data);
+            }
         } catch {}
+    }
+
+    function removeNote(id) {
+        if (applyingRemote) return;
+        notesRef.child(id).remove();
     }
 
     function applyRemoteNotes(data) {
         if (!data) data = {};
         applyingRemote = true;
 
-        localStorage.setItem(NOTES_KEY, JSON.stringify(data));
+        // Merge remote into local
+        const local = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}');
+        const merged = { ...local, ...data };
+        localStorage.setItem(NOTES_KEY, JSON.stringify(merged));
 
         // Update note textareas in the DOM
         document.querySelectorAll('.day-notes textarea').forEach(textarea => {
@@ -179,18 +209,24 @@
     // Override checkbox change handler — push to Firebase
     document.addEventListener('change', (e) => {
         if (e.target.type === 'checkbox' && e.target.dataset.id && !applyingRemote) {
+            const id = e.target.dataset.id;
+
             // Update localStorage
             const items = JSON.parse(localStorage.getItem(CHECKLIST_KEY)) || {};
             if (e.target.checked) {
-                items[e.target.dataset.id] = true;
+                items[id] = true;
             } else {
-                delete items[e.target.dataset.id];
+                delete items[id];
             }
             localStorage.setItem(CHECKLIST_KEY, JSON.stringify(items));
 
-            // Push to Firebase
+            // Push individual change to Firebase (not full overwrite)
             updateSyncStatus('syncing');
-            pushChecklist();
+            if (e.target.checked) {
+                checklistRef.child(id).set(true);
+            } else {
+                checklistRef.child(id).remove();
+            }
         }
     });
 
@@ -200,9 +236,14 @@
         if (e.target.tagName === 'TEXTAREA' && e.target.dataset.note && !applyingRemote) {
             clearTimeout(notesSyncTimeout);
             notesSyncTimeout = setTimeout(() => {
-                // localStorage is already updated by app.js
+                const noteId = e.target.dataset.note;
+                const value = e.target.value.trim();
                 updateSyncStatus('syncing');
-                pushNotes();
+                if (value) {
+                    notesRef.child(noteId).set(value);
+                } else {
+                    notesRef.child(noteId).remove();
+                }
             }, 800);
         }
     });
@@ -221,28 +262,11 @@
     });
 
     // ===== INITIAL SYNC =====
-    // On first load, push local data to Firebase (won't overwrite if remote has data
-    // because the 'value' listener will fire and apply remote data)
+    // On first load, merge local data into Firebase (update, not overwrite)
     setTimeout(() => {
-        const localChecklist = JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}');
-        const localNotes = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}');
-
-        // Only push if local has data and remote might be empty
-        if (Object.keys(localChecklist).length > 0) {
-            checklistRef.once('value', (snap) => {
-                if (!snap.val()) {
-                    pushChecklist();
-                }
-            });
-        }
-        if (Object.keys(localNotes).length > 0) {
-            notesRef.once('value', (snap) => {
-                if (!snap.val()) {
-                    pushNotes();
-                }
-            });
-        }
-    }, 1000);
+        pushChecklist();
+        pushNotes();
+    }, 1500);
 
     // Expose sync functions globally for other scripts
     window._firebaseSync = {
