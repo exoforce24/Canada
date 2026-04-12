@@ -353,6 +353,7 @@
         { id: 'essentials', label: 'Info' },
         { id: 'packing', label: 'Pack' },
         { id: 'reservations', label: 'Reserv.' },
+        { id: 'bookings', label: 'Tours' },
         { id: 'aurora', label: 'Aurora' },
         { id: 'stargazing', label: 'Stars' },
         { id: 'driving', label: 'Drives' },
