@@ -2439,6 +2439,272 @@ body {
     color: var(--text-bright);
 }
 
+/* ========== PRE-DEPARTURE CHECKLIST ========== */
+.predeparture-section {
+    background: var(--bg-card);
+}
+
+.predeparture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.predeparture-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.predeparture-card h4 {
+    color: var(--text-bright);
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.predeparture-card:nth-child(1) { border-top: 3px solid #66bb6a; }
+.predeparture-card:nth-child(2) { border-top: 3px solid #ffa726; }
+.predeparture-card:nth-child(3) { border-top: 3px solid #ef5350; }
+.predeparture-card:nth-child(4) { border-top: 3px solid var(--accent); }
+
+/* ========== EXPORT TO GOOGLE MAPS ========== */
+.export-section {
+    background: var(--bg);
+}
+
+.export-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+}
+
+.export-description {
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.export-btn {
+    display: inline-block;
+    margin: 0 auto 24px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #4285F4, #1a73e8);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(66,133,244,0.3);
+}
+
+.export-steps {
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.export-steps h4 {
+    color: var(--text-bright);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.export-steps ol {
+    padding-left: 20px;
+    color: var(--text);
+    font-size: 0.85rem;
+}
+
+.export-steps li {
+    padding: 3px 0;
+    line-height: 1.5;
+}
+
+.export-steps code {
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: var(--gold);
+}
+
+/* ========== AIRPORT TIMING ========== */
+.airport-section {
+    background: var(--bg-card);
+}
+
+.airport-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.airport-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+}
+
+.airport-code {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--flight);
+    background: rgba(66,165,245,0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.airport-card h4 {
+    color: var(--text-bright);
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+    padding-right: 60px;
+}
+
+.airport-flight {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+}
+
+.airport-times {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.airport-time {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.airport-time:last-child { border-bottom: none; }
+
+.airport-time span { color: var(--text-dim); }
+.airport-time strong { color: var(--text-bright); font-weight: 500; }
+
+.airport-tip {
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* ========== INSURANCE CLAIM KIT ========== */
+.insurance-section {
+    background: var(--bg);
+}
+
+.insurance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.insurance-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+.insurance-card h4 {
+    color: var(--text-bright);
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.insurance-tips ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.insurance-tips li {
+    font-size: 0.8rem;
+    color: var(--text);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.insurance-tips li::before {
+    content: '💡';
+    position: absolute;
+    left: 0;
+}
+
+.insurance-tips li strong {
+    color: var(--gold);
+}
+
+/* ========== WE SURVIVED BANNER ========== */
+.we-survived-banner {
+    text-align: center;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, rgba(200,16,46,0.15), rgba(212,168,83,0.15));
+    border: 2px solid rgba(212,168,83,0.3);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+}
+
+.we-survived-banner.we-during {
+    background: linear-gradient(135deg, rgba(66,165,245,0.1), rgba(102,187,106,0.1));
+    border-color: rgba(66,165,245,0.3);
+}
+
+.we-survived-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+}
+
+.we-survived-sub {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
 /* ========== FOOTER ========== */
 .footer {
     text-align: center;

@@ -365,6 +365,10 @@
         { id: 'emergency', label: 'SOS' },
         { id: 'parking', label: 'Park' },
         { id: 'live-weather', label: 'Wx Live' },
+        { id: 'predeparture', label: 'Pre-Trip' },
+        { id: 'airports', label: 'Airports' },
+        { id: 'insurance-kit', label: 'Insurance' },
+        { id: 'export-maps', label: 'Export' },
         { id: 'trip-summary', label: 'Summary' },
     ];
 

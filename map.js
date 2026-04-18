@@ -182,6 +182,7 @@
     }
 
     // Initialize map
+    window._tripLocations = locations;
     const map = window._honeymoonMap = L.map('trip-map', {
         zoomControl: true,
         scrollWheelZoom: true,
