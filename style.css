@@ -1181,6 +1181,7 @@ body {
 .packing-card.packing-his { border-top: 3px solid #42a5f5; }
 .packing-card.packing-hers { border-top: 3px solid #e040fb; }
 .packing-card.packing-shared { border-top: 3px solid var(--gold); }
+.packing-card.packing-photo { border-top: 3px solid #ef5350; }
 
 /* ========== RESTAURANT RESERVATIONS ========== */
 .reservations-section {
