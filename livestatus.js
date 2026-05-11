@@ -106,26 +106,38 @@
     });
 
     // ===== ROAD CLOSURE ALERTS =====
-    // Keywords for roads on our route
-    const routeKeywords = [
-        // Alberta — Banff/Jasper/Calgary corridor
-        'highway 1', 'hwy 1', 'trans-canada', 'transcanada',
-        'highway 93', 'hwy 93', 'icefields parkway',
-        'highway 11', 'hwy 11', 'david thompson',
-        'highway 16', 'hwy 16', 'yellowhead',
-        'banff', 'jasper', 'lake louise', 'canmore', 'field',
-        'columbia icefield', 'sunwapta', 'athabasca',
-        'bow valley parkway', 'highway 1a',
-        // BC — Sea-to-Sky + Yoho
-        'highway 99', 'hwy 99', 'sea-to-sky', 'sea to sky',
-        'squamish', 'whistler', 'horseshoe bay',
-        'yoho', 'kicking horse',
-    ];
+    // Roads relevant to each trip day
+    const dayRoadKeywords = {
+        3: ['highway 99', 'hwy 99', 'sea-to-sky', 'sea to sky', 'squamish', 'whistler', 'horseshoe bay'],
+        4: ['highway 1', 'hwy 1', 'trans-canada', 'transcanada', 'canmore'],
+        5: ['highway 1', 'hwy 1', 'banff', 'bow valley parkway', 'highway 1a', 'johnston canyon'],
+        6: ['highway 1', 'hwy 1', 'banff', 'lake minnewanka', 'two jack'],
+        7: ['highway 1', 'hwy 1', 'bow valley parkway', 'highway 1a', 'yoho', 'field', 'emerald lake', 'takakkaw'],
+        8: ['highway 1', 'hwy 1', 'lake louise'],
+        9: ['yoho', 'field', 'kicking horse'],
+        10: ['highway 1', 'hwy 1', 'highway 93', 'hwy 93', 'icefields parkway', 'lake louise', 'moraine lake', 'peyto', 'columbia icefield'],
+        11: ['highway 93', 'hwy 93', 'icefields parkway', 'columbia icefield', 'sunwapta', 'athabasca falls', 'jasper'],
+        12: ['highway 16', 'hwy 16', 'yellowhead', 'jasper', 'maligne'],
+        13: ['highway 16', 'hwy 16', 'jasper', 'miette'],
+        14: ['jasper', 'patricia lake', 'pyramid lake', 'five lakes'],
+        15: ['jasper'],
+        16: ['highway 11', 'hwy 11', 'david thompson', 'abraham lake', 'rocky mountain house', 'calgary'],
+    };
 
-    function eventMatchesRoute(text) {
+    // All route keywords (union)
+    const routeKeywords = [...new Set(Object.values(dayRoadKeywords).flat())];
+
+    function eventMatchesRoute(text, keywords) {
         if (!text) return false;
         const lower = text.toLowerCase();
-        return routeKeywords.some(kw => lower.includes(kw));
+        return keywords.some(kw => lower.includes(kw));
+    }
+
+    function getTodayRoadKeywords() {
+        const day = getCurrentDay();
+        if (day && dayRoadKeywords[day]) return dayRoadKeywords[day];
+        // If not on trip or no roads today, return all
+        return routeKeywords;
     }
 
     function severityClass(severity) {
@@ -137,14 +149,13 @@
 
     async function fetchAlbertaAlerts() {
         try {
-            // Alberta 511 public events API
             const resp = await fetch('https://511.alberta.ca/api/v2/get/event');
             if (!resp.ok) throw new Error('AB API ' + resp.status);
             const events = await resp.json();
             return events
                 .filter(e => {
                     const text = (e.RoadwayName || '') + ' ' + (e.Description || '') + ' ' + (e.LocationDescription || '');
-                    return eventMatchesRoute(text);
+                    return eventMatchesRoute(text, routeKeywords);
                 })
                 .map(e => ({
                     region: 'AB',
@@ -153,6 +164,7 @@
                     location: e.LocationDescription || '',
                     severity: e.Severity || e.EventType || '',
                     updated: e.LastUpdated || '',
+                    _searchText: ((e.RoadwayName || '') + ' ' + (e.Description || '') + ' ' + (e.LocationDescription || '')).toLowerCase(),
                 }));
         } catch (err) {
             return null;
@@ -161,7 +173,6 @@
 
     async function fetchBCAlerts() {
         try {
-            // BC Open511 public API
             const resp = await fetch('https://api.open511.gov.bc.ca/events?limit=200&status=ACTIVE&format=json');
             if (!resp.ok) throw new Error('BC API ' + resp.status);
             const data = await resp.json();
@@ -169,7 +180,7 @@
             return events
                 .filter(e => {
                     const text = (e.headline || '') + ' ' + (e.description || '') + ' ' + (e.roads || []).map(r => r.name).join(' ');
-                    return eventMatchesRoute(text);
+                    return eventMatchesRoute(text, routeKeywords);
                 })
                 .map(e => ({
                     region: 'BC',
@@ -178,59 +189,149 @@
                     location: e.description || '',
                     severity: e.severity || e.event_type || '',
                     updated: e.updated || '',
+                    _searchText: ((e.headline || '') + ' ' + (e.description || '') + ' ' + (e.roads || []).map(r => r.name).join(' ')).toLowerCase(),
                 }));
         } catch (err) {
             return null;
         }
     }
 
-    function renderAlerts(alerts, hadAnyError) {
+    // State
+    let _allAlerts = [];
+    let _hadError = false;
+    let _expanded = false;
+    let _todayOnly = false;
+
+    function getFilteredAlerts() {
+        if (!_todayOnly) return _allAlerts;
+        const todayKw = getTodayRoadKeywords();
+        return _allAlerts.filter(a => todayKw.some(kw => a._searchText.includes(kw)));
+    }
+
+    function getCountBySeverity(alerts) {
+        let crit = 0, warn = 0, info = 0;
+        alerts.forEach(a => {
+            const s = severityClass(a.severity);
+            if (s === 'severity-critical') crit++;
+            else if (s === 'severity-warn') warn++;
+            else info++;
+        });
+        return { crit, warn, info, total: alerts.length };
+    }
+
+    function renderAlertCard(a) {
+        const sev = severityClass(a.severity);
+        const icon = sev === 'severity-critical' ? '🚨' : sev === 'severity-warn' ? '⚠️' : 'ℹ️';
+        const updated = a.updated ? new Date(a.updated).toLocaleString() : '';
+        return `<div class="road-alert-card ${sev}">
+            <div class="road-alert-icon">${icon}</div>
+            <div class="road-alert-body">
+                <div class="road-alert-title">${a.region} · ${a.road}</div>
+                <div class="road-alert-desc">${a.desc}</div>
+                ${a.location ? `<div class="road-alert-loc">${a.location}</div>` : ''}
+                ${updated ? `<div class="road-alert-time">Updated: ${updated}</div>` : ''}
+            </div>
+        </div>`;
+    }
+
+    function renderSummary() {
+        const summary = document.getElementById('road-alerts-summary');
+        const controls = document.getElementById('road-alerts-controls');
         const container = document.getElementById('road-alerts-container');
+        const filterBtn = document.getElementById('road-alerts-filter-btn');
+        const toggleBtn = document.getElementById('road-alerts-toggle-btn');
         const attribution = document.getElementById('road-alerts-attribution');
 
-        if (alerts === null || alerts.length === 0) {
-            if (hadAnyError) {
-                container.innerHTML = '<div class="road-alert-card road-alert-info">' +
-                    '<div class="road-alert-icon">📡</div>' +
-                    '<div class="road-alert-body">' +
-                    '<div class="road-alert-title">Unable to fetch live alerts</div>' +
-                    '<div class="road-alert-desc">Check <a href="https://511.alberta.ca" target="_blank" rel="noopener">Alberta 511</a> and <a href="https://www.drivebc.ca" target="_blank" rel="noopener">DriveBC</a> directly</div>' +
-                    '</div></div>';
-            } else {
-                container.innerHTML = '<div class="road-alert-card road-alert-ok">' +
-                    '<div class="road-alert-icon">✅</div>' +
-                    '<div class="road-alert-body">' +
-                    '<div class="road-alert-title">All clear on your route!</div>' +
-                    '<div class="road-alert-desc">No closures or warnings on the roads you\'ll be driving</div>' +
-                    '</div></div>';
-            }
-            attribution.textContent = 'Sources: Alberta 511 & DriveBC Open511';
+        const filtered = getFilteredAlerts();
+        const totalCounts = getCountBySeverity(_allAlerts);
+        const filteredCounts = getCountBySeverity(filtered);
+        const onTrip = getCurrentDay() !== null;
+
+        // Build summary line
+        if (_hadError) {
+            summary.innerHTML = '<span class="ra-icon">📡</span> Unable to fetch live alerts &mdash; <a href="https://511.alberta.ca" target="_blank" rel="noopener">Alberta 511</a> · <a href="https://www.drivebc.ca" target="_blank" rel="noopener">DriveBC</a>';
+            summary.className = 'road-alerts-summary ra-error';
+            controls.style.display = 'none';
+            container.style.display = 'none';
+            attribution.textContent = '';
             return;
         }
 
-        container.innerHTML = alerts.map(a => {
-            const sev = severityClass(a.severity);
-            const icon = sev === 'severity-critical' ? '🚨' : sev === 'severity-warn' ? '⚠️' : 'ℹ️';
-            const updated = a.updated ? new Date(a.updated).toLocaleString() : '';
-            return `<div class="road-alert-card ${sev}">
-                <div class="road-alert-icon">${icon}</div>
-                <div class="road-alert-body">
-                    <div class="road-alert-title">${a.region} · ${a.road}</div>
-                    <div class="road-alert-desc">${a.desc}</div>
-                    ${a.location ? `<div class="road-alert-loc">${a.location}</div>` : ''}
-                    ${updated ? `<div class="road-alert-time">Updated: ${updated}</div>` : ''}
-                </div>
-            </div>`;
-        }).join('');
-        attribution.textContent = `Sources: Alberta 511 & DriveBC · ${alerts.length} alert(s) on your route`;
+        if (_allAlerts.length === 0) {
+            summary.innerHTML = '<span class="ra-icon">✅</span> All clear &mdash; no alerts on your route';
+            summary.className = 'road-alerts-summary ra-ok';
+            controls.style.display = 'none';
+            container.style.display = 'none';
+            attribution.textContent = 'Sources: Alberta 511 & DriveBC';
+            return;
+        }
+
+        // Build chips for summary
+        const chips = [];
+        if (totalCounts.crit) chips.push(`<span class="ra-chip ra-chip-crit">🚨 ${totalCounts.crit} closure${totalCounts.crit > 1 ? 's' : ''}</span>`);
+        if (totalCounts.warn) chips.push(`<span class="ra-chip ra-chip-warn">⚠️ ${totalCounts.warn} warning${totalCounts.warn > 1 ? 's' : ''}</span>`);
+        if (totalCounts.info) chips.push(`<span class="ra-chip ra-chip-info">ℹ️ ${totalCounts.info} info</span>`);
+
+        summary.innerHTML = `<div class="ra-summary-line">${chips.join(' ')}</div>` +
+            (_todayOnly && onTrip ? `<div class="ra-summary-sub">Showing ${filtered.length} for today's roads</div>` : '');
+        summary.className = 'road-alerts-summary';
+
+        controls.style.display = 'flex';
+        toggleBtn.textContent = _expanded ? 'Hide alerts' : `Show ${filtered.length} alert${filtered.length !== 1 ? 's' : ''}`;
+        filterBtn.style.display = onTrip ? 'inline-block' : 'none';
+        filterBtn.textContent = _todayOnly ? 'Show all roads' : 'Today\'s roads only';
+        filterBtn.classList.toggle('active', _todayOnly);
+
+        if (_expanded) {
+            container.style.display = '';
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="road-alert-card road-alert-ok">' +
+                    '<div class="road-alert-icon">✅</div>' +
+                    '<div class="road-alert-body">' +
+                    '<div class="road-alert-title">No alerts for today\'s roads</div>' +
+                    '<div class="road-alert-desc">There are alerts on other parts of your route &mdash; toggle "Show all roads" to see them</div>' +
+                    '</div></div>';
+            } else {
+                container.innerHTML = filtered.map(renderAlertCard).join('');
+            }
+        } else {
+            container.style.display = 'none';
+        }
+
+        attribution.textContent = `Sources: Alberta 511 & DriveBC · ${_allAlerts.length} total alert${_allAlerts.length !== 1 ? 's' : ''} on your route`;
     }
 
     async function fetchAlerts() {
         const [ab, bc] = await Promise.all([fetchAlbertaAlerts(), fetchBCAlerts()]);
-        const hadError = ab === null && bc === null;
-        const alerts = [...(ab || []), ...(bc || [])];
-        renderAlerts(hadError ? null : alerts, hadError);
+        _hadError = ab === null && bc === null;
+        _allAlerts = [...(ab || []), ...(bc || [])];
+        // Auto-enable today-only filter during trip
+        if (getCurrentDay() && !_todayOnly && _allAlerts.length > 5) {
+            _todayOnly = true;
+        }
+        renderSummary();
     }
+
+    // Wire up toggle buttons
+    document.addEventListener('DOMContentLoaded', wireRoadAlertButtons);
+    function wireRoadAlertButtons() {
+        const toggleBtn = document.getElementById('road-alerts-toggle-btn');
+        const filterBtn = document.getElementById('road-alerts-filter-btn');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                _expanded = !_expanded;
+                renderSummary();
+            });
+        }
+        if (filterBtn) {
+            filterBtn.addEventListener('click', () => {
+                _todayOnly = !_todayOnly;
+                renderSummary();
+            });
+        }
+    }
+    // Run immediately too in case DOM already loaded
+    wireRoadAlertButtons();
 
     fetchAlerts();
     setInterval(fetchAlerts, 30 * 60 * 1000); // Refresh every 30 min

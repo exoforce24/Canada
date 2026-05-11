@@ -96,10 +96,12 @@
 <section class="section road-alerts-section" id="road-alerts">
     <div class="container">
         <h2 class="section-title">&#128679; Road Alerts</h2>
-        <p class="section-subtitle">Live closures &amp; warnings on your route (Alberta &amp; BC)</p>
-        <div class="road-alerts-container" id="road-alerts-container">
-            <div class="road-alerts-loading">Loading live road status...</div>
+        <div class="road-alerts-summary" id="road-alerts-summary">Loading live road status...</div>
+        <div class="road-alerts-controls" id="road-alerts-controls" style="display:none;">
+            <button class="road-alerts-toggle" id="road-alerts-toggle-btn">Show alerts</button>
+            <button class="road-alerts-filter" id="road-alerts-filter-btn" style="display:none;">Today's roads only</button>
         </div>
+        <div class="road-alerts-container" id="road-alerts-container" style="display:none;"></div>
         <p class="road-alerts-attribution" id="road-alerts-attribution"></p>
     </div>
 </section>
