@@ -312,26 +312,29 @@
         renderSummary();
     }
 
-    // Wire up toggle buttons
-    document.addEventListener('DOMContentLoaded', wireRoadAlertButtons);
+    // Wire up toggle buttons (only once)
+    let _wired = false;
     function wireRoadAlertButtons() {
+        if (_wired) return;
         const toggleBtn = document.getElementById('road-alerts-toggle-btn');
         const filterBtn = document.getElementById('road-alerts-filter-btn');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                _expanded = !_expanded;
-                renderSummary();
-            });
-        }
-        if (filterBtn) {
-            filterBtn.addEventListener('click', () => {
-                _todayOnly = !_todayOnly;
-                renderSummary();
-            });
-        }
+        if (!toggleBtn || !filterBtn) return;
+        _wired = true;
+        toggleBtn.addEventListener('click', () => {
+            _expanded = !_expanded;
+            renderSummary();
+        });
+        filterBtn.addEventListener('click', () => {
+            _todayOnly = !_todayOnly;
+            renderSummary();
+        });
     }
-    // Run immediately too in case DOM already loaded
-    wireRoadAlertButtons();
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireRoadAlertButtons);
+    } else {
+        wireRoadAlertButtons();
+    }
 
     fetchAlerts();
     setInterval(fetchAlerts, 30 * 60 * 1000); // Refresh every 30 min
