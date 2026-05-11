@@ -66,6 +66,44 @@
     <div class="stat"><span class="stat-num">7</span><span class="stat-label">Jaw-Drop Views</span></div>
 </section>
 
+<!-- Live Trip Status (only visible during trip) -->
+<section class="section live-status-section" id="live-status" style="display:none;">
+    <div class="container">
+        <div class="live-status-grid">
+            <!-- Day Counter Card -->
+            <div class="live-status-card live-day-counter">
+                <div class="lsc-label">Day in Trip</div>
+                <div class="lsc-day-num" id="live-day-num">--</div>
+                <div class="lsc-day-of">of 23 days</div>
+                <div class="lsc-progress-bar">
+                    <div class="lsc-progress-fill" id="live-day-fill"></div>
+                </div>
+                <div class="lsc-pct" id="live-day-pct">--%</div>
+            </div>
+
+            <!-- Next Up Card -->
+            <div class="live-status-card live-next-up">
+                <div class="lsc-label">&#9201; Next Up</div>
+                <div class="lsc-next-text" id="live-next-text">Loading...</div>
+                <div class="lsc-next-time" id="live-next-time"></div>
+                <div class="lsc-next-day" id="live-next-day"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Road Closure Alerts -->
+<section class="section road-alerts-section" id="road-alerts">
+    <div class="container">
+        <h2 class="section-title">&#128679; Road Alerts</h2>
+        <p class="section-subtitle">Live closures &amp; warnings on your route (Alberta &amp; BC)</p>
+        <div class="road-alerts-container" id="road-alerts-container">
+            <div class="road-alerts-loading">Loading live road status...</div>
+        </div>
+        <p class="road-alerts-attribution" id="road-alerts-attribution"></p>
+    </div>
+</section>
+
 <!-- Sync Status -->
 <div class="sync-bar" id="sync-bar">
     <span class="sync-icon" id="sync-icon">&#128260;</span>
@@ -2095,6 +2133,7 @@
 <script src="extras.js"></script>
 <script src="extras2.js"></script>
 <script src="extras3.js"></script>
+<script src="livestatus.js"></script>
 <script>
 // Register service worker for offline support
 if ('serviceWorker' in navigator) {

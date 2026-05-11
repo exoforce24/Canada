@@ -346,6 +346,7 @@
 
     // Add section links
     const sections = [
+        { id: 'live-status', label: 'Live' },
         { id: 'map-section', label: 'Map' },
         { id: 'flights', label: 'Flights' },
         { id: 'cars', label: 'Cars' },
@@ -358,6 +359,7 @@
         { id: 'stargazing', label: 'Stars' },
         { id: 'driving', label: 'Drives' },
         { id: 'gas-stations', label: 'Gas' },
+        { id: 'road-alerts', label: 'Roads' },
         { id: 'offline-maps', label: 'Offline' },
         { id: 'tips', label: 'Tips' },
         { id: 'currency', label: 'FX' },

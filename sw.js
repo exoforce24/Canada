@@ -1,6 +1,6 @@
 /* Service Worker for offline support */
 
-const CACHE_NAME = 'canada-honeymoon-v8';
+const CACHE_NAME = 'canada-honeymoon-v9';
 const ASSETS = [
     './',
     './index.html',
@@ -11,6 +11,7 @@ const ASSETS = [
     './extras.js',
     './extras2.js',
     './extras3.js',
+    './livestatus.js',
     './sync.js',
 ];
 
