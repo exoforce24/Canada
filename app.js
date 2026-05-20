@@ -361,6 +361,7 @@
         { id: 'gas-stations', label: 'Gas' },
         { id: 'road-alerts', label: 'Roads' },
         { id: 'offline-maps', label: 'Offline' },
+        { id: 'souvenirs', label: 'Souvenirs' },
         { id: 'tips', label: 'Tips' },
         { id: 'currency', label: 'FX' },
         { id: 'wear-today', label: 'Wear' },
