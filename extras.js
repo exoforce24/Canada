@@ -6,7 +6,7 @@
     'use strict';
 
     // ===== TRIP DATE CONSTANTS =====
-    const TRIP_START = new Date('2026-05-23');
+    const TRIP_START = new Date('2026-05-23T13:25:00+08:00'); // Actual departure from Singapore
     const TRIP_END = new Date('2026-06-14');
 
     const tripDates = {

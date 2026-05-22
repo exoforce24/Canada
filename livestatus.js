@@ -6,8 +6,8 @@
 (function () {
     'use strict';
 
-    const TRIP_START = new Date('2026-05-23T00:00:00');
-    const TRIP_END = new Date('2026-06-14T23:59:59');
+    const TRIP_START = new Date('2026-05-23T13:25:00+08:00'); // Actual departure from Singapore (SGT)
+    const TRIP_END = new Date('2026-06-14T23:59:59-07:00'); // Last day in Vancouver timezone
     const TOTAL_DAYS = 23;
 
     const tripDates = {};
