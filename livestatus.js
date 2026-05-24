@@ -14,7 +14,7 @@
     for (let d = 1; d <= TOTAL_DAYS; d++) {
         const dt = new Date(TRIP_START);
         dt.setDate(dt.getDate() + d - 1);
-        tripDates[d] = dt.toISOString().split('T')[0];
+        tripDates[d] = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
     }
 
     function getCurrentDay() {

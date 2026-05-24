@@ -410,8 +410,14 @@
         22: '2026-06-13', 23: '2026-06-14',
     };
 
+    // Get local date string (not UTC!) to correctly match the user's timezone
+    function getLocalDateString() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+
     function highlightToday() {
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalDateString();
         Object.entries(tripDates).forEach(([dayNum, date]) => {
             const card = document.getElementById('day-' + dayNum);
             if (card) {
@@ -529,7 +535,7 @@
     function updateTomorrow() {
         const card = document.getElementById('tomorrow-card');
         const content = document.getElementById('tomorrow-content');
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalDateString();
 
         // Find which trip day is today
         let currentDay = null;

@@ -59,9 +59,8 @@
     // ===== WHAT TO WEAR TODAY =====
     const tripDates = {};
     for (let d = 1; d <= 23; d++) {
-        const date = new Date('2026-05-23');
-        date.setDate(date.getDate() + d - 1);
-        tripDates[d] = date.toISOString().split('T')[0];
+        const date = new Date(2026, 4, 22 + d); // Month is 0-indexed, May = 4
+        tripDates[d] = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
     const weatherData = {
@@ -148,7 +147,8 @@
 
     function renderWearToday() {
         const card = document.getElementById('wear-card');
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
         let currentDay = null;
         Object.entries(tripDates).forEach(([d, date]) => {
