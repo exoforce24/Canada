@@ -7,13 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇨🇦</text></svg>">
 </head>
 <body>
 
@@ -34,27 +28,6 @@
         <p class="countdown-label" id="countdown-label">until takeoff</p>
     </div>
     <div class="scroll-hint" aria-hidden="true">&darr;</div>
-    <!-- Route Progress (visible during trip) -->
-    <div class="route-progress" id="route-progress">
-        <div class="route-line">
-            <div class="route-stops">
-                <span class="route-stop" data-day="1" title="Vancouver">YVR</span>
-                <span class="route-stop" data-day="4" title="Calgary">YYC</span>
-                <span class="route-stop" data-day="5" title="Banff">BNF</span>
-                <span class="route-stop" data-day="7" title="Yoho">YHO</span>
-                <span class="route-stop" data-day="10" title="Icefields">ICE</span>
-                <span class="route-stop" data-day="11" title="Jasper">JSP</span>
-                <span class="route-stop" data-day="16" title="Calgary">YYC</span>
-                <span class="route-stop" data-day="17" title="Montreal">YUL</span>
-                <span class="route-stop" data-day="18" title="Quebec City">QC</span>
-                <span class="route-stop" data-day="21" title="Home">SIN</span>
-            </div>
-            <div class="route-track">
-                <div class="route-filled" id="route-filled"></div>
-                <div class="route-car" id="route-car">&#128663;</div>
-            </div>
-        </div>
-    </div>
 </header>
 
 <!-- Trip Stats Bar -->
@@ -65,52 +38,6 @@
     <div class="stat"><span class="stat-num">7</span><span class="stat-label">Provinces & Parks</span></div>
     <div class="stat"><span class="stat-num">7</span><span class="stat-label">Jaw-Drop Views</span></div>
 </section>
-
-<!-- Live Trip Status (only visible during trip) -->
-<section class="section live-status-section" id="live-status" style="display:none;">
-    <div class="container">
-        <div class="live-status-grid">
-            <!-- Day Counter Card -->
-            <div class="live-status-card live-day-counter">
-                <div class="lsc-label">Day in Trip</div>
-                <div class="lsc-day-num" id="live-day-num">--</div>
-                <div class="lsc-day-of">of 23 days</div>
-                <div class="lsc-progress-bar">
-                    <div class="lsc-progress-fill" id="live-day-fill"></div>
-                </div>
-                <div class="lsc-pct" id="live-day-pct">--%</div>
-            </div>
-
-            <!-- Next Up Card -->
-            <div class="live-status-card live-next-up">
-                <div class="lsc-label">&#9201; Next Up</div>
-                <div class="lsc-next-text" id="live-next-text">Loading...</div>
-                <div class="lsc-next-time" id="live-next-time"></div>
-                <div class="lsc-next-day" id="live-next-day"></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Road Closure Alerts -->
-<section class="section road-alerts-section" id="road-alerts">
-    <div class="container">
-        <h2 class="section-title">&#128679; Road Alerts</h2>
-        <div class="road-alerts-summary" id="road-alerts-summary">Loading live road status...</div>
-        <div class="road-alerts-controls" id="road-alerts-controls" style="display:none;">
-            <button class="road-alerts-toggle" id="road-alerts-toggle-btn">Show alerts</button>
-            <button class="road-alerts-filter" id="road-alerts-filter-btn" style="display:none;">Today's roads only</button>
-        </div>
-        <div class="road-alerts-container" id="road-alerts-container" style="display:none;"></div>
-        <p class="road-alerts-attribution" id="road-alerts-attribution"></p>
-    </div>
-</section>
-
-<!-- Sync Status -->
-<div class="sync-bar" id="sync-bar">
-    <span class="sync-icon" id="sync-icon">&#128260;</span>
-    <span class="sync-text" id="sync-text">Connecting...</span>
-</div>
 
 <!-- Progress Bar -->
 <section class="progress-section" id="progress-section">
@@ -132,38 +59,10 @@
     </div>
 </nav>
 
-<!-- Map Section -->
-<section class="section map-section" id="map-section">
-    <div class="container">
-        <h2 class="section-title">&#128506; Route Overview</h2>
-        <p class="map-subtitle">All 23 days across Canada — tap any marker for details</p>
-        <div class="map-filters">
-            <button class="map-filter active" data-filter="all">All Stops</button>
-            <button class="map-filter" data-filter="star">&#11088; Viewpoints</button>
-            <button class="map-filter" data-filter="dining">&#127860; Dining</button>
-            <button class="map-filter" data-filter="hike">&#129406; Hikes</button>
-            <button class="map-filter" data-filter="flight">&#9992;&#65039; Flights</button>
-            <button class="map-filter" data-filter="darksky" id="darksky-toggle">&#127769; Dark Sky</button>
-        </div>
-    </div>
-    <div id="trip-map"></div>
-    <div class="container">
-        <div class="map-legend">
-            <span class="legend-item"><span class="legend-dot" style="background:#00bcd4"></span>Vancouver</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#4caf50"></span>Rockies</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#66bb6a"></span>Jasper</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#7c4dff"></span>Quebec</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#e040fb"></span>Montreal</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#d4a853"></span>&#11088; Viewpoints</span>
-        </div>
-    </div>
-</section>
-
 <!-- Flights Section -->
 <section class="section flights-section" id="flights">
     <div class="container">
         <h2 class="section-title">&#9992;&#65039; Flights</h2>
-        <p class="section-subtitle">Tap "Track" for live status &amp; delays on Flightradar24</p>
         <div class="flights-grid">
             <div class="flight-card">
                 <div class="flight-route">Singapore &rarr; Hong Kong &rarr; Vancouver</div>
@@ -172,12 +71,10 @@
                     <div class="flight-leg">
                         <span class="flight-code">CX758</span>
                         <span class="flight-time">13:25 &rarr; 17:35</span>
-                        <a href="https://www.flightradar24.com/data/flights/cx758" target="_blank" rel="noopener" class="track-btn">&#128205; Track</a>
                     </div>
                     <div class="flight-leg">
                         <span class="flight-code">CX888</span>
                         <span class="flight-time">00:45 &rarr; 21:25</span>
-                        <a href="https://www.flightradar24.com/data/flights/cx888" target="_blank" rel="noopener" class="track-btn">&#128205; Track</a>
                     </div>
                 </div>
             </div>
@@ -186,9 +83,8 @@
                 <div class="flight-date">May 26</div>
                 <div class="flight-details">
                     <div class="flight-leg">
-                        <span class="flight-code">WestJet WS114</span>
-                        <span class="flight-time">12:45 &rarr; 15:15</span>
-                        <a href="https://www.flightradar24.com/data/flights/ws114" target="_blank" rel="noopener" class="track-btn">&#128205; Track</a>
+                        <span class="flight-code">WestJet WS112</span>
+                        <span class="flight-time">11:45 &rarr; 14:15</span>
                     </div>
                 </div>
             </div>
@@ -199,7 +95,6 @@
                     <div class="flight-leg">
                         <span class="flight-code">Porter PD384</span>
                         <span class="flight-time">08:00 &rarr; 14:12</span>
-                        <a href="https://www.flightradar24.com/data/flights/pd384" target="_blank" rel="noopener" class="track-btn">&#128205; Track</a>
                     </div>
                 </div>
             </div>
@@ -210,7 +105,6 @@
                     <div class="flight-leg">
                         <span class="flight-code">QR764</span>
                         <span class="flight-time">21:35 &rarr; 16:40+1</span>
-                        <a href="https://www.flightradar24.com/data/flights/qr764" target="_blank" rel="noopener" class="track-btn">&#128205; Track</a>
                     </div>
                 </div>
             </div>
@@ -221,7 +115,6 @@
                     <div class="flight-leg">
                         <span class="flight-code">QR942</span>
                         <span class="flight-time">19:40 &rarr; 08:50+1</span>
-                        <a href="https://www.flightradar24.com/data/flights/qr942" target="_blank" rel="noopener" class="track-btn">&#128205; Track</a>
                     </div>
                 </div>
             </div>
@@ -275,113 +168,10 @@
     </div>
 </section>
 
-<!-- Emergency Info & Trip Essentials -->
-<section class="section essentials-section" id="essentials">
-    <div class="container">
-        <h2 class="section-title">&#128203; Trip Essentials</h2>
-
-        <!-- Password Lock Overlay -->
-        <div class="essentials-lock" id="essentials-lock">
-            <div class="lock-icon">&#128274;</div>
-            <p class="lock-text">Enter your shared password to view trip details</p>
-            <div class="lock-form">
-                <input type="password" id="lock-password" placeholder="Password" autocomplete="off">
-                <button id="lock-submit">Unlock</button>
-            </div>
-            <p class="lock-error" id="lock-error"></p>
-        </div>
-
-        <!-- Decrypted content appears here -->
-        <div class="essentials-content" id="essentials-content" style="display:none;">
-            <div class="essentials-unlocked-bar">
-                <span>&#128275; Unlocked</span>
-                <button id="lock-btn" class="lock-again-btn">Lock</button>
-            </div>
-            <div class="essentials-grid">
-                <div class="essentials-card" id="essentials-accom">
-                    <h4>&#127968; Accommodations</h4>
-                    <div id="accom-list"></div>
-                </div>
-                <div class="essentials-card" id="essentials-cars">
-                    <h4>&#128663; Car Rentals</h4>
-                    <div id="cars-list"></div>
-                </div>
-                <div class="essentials-card" id="essentials-contacts">
-                    <h4>&#128178; Important Contacts</h4>
-                    <div id="contacts-list"></div>
-                </div>
-                <div class="essentials-card">
-                    <h4>&#9201; Timezone Guide</h4>
-                    <div class="tz-grid">
-                        <div class="tz-item">
-                            <span class="tz-city">Singapore</span>
-                            <span class="tz-offset">SGT (UTC+8)</span>
-                            <span class="tz-diff">Home</span>
-                        </div>
-                        <div class="tz-item">
-                            <span class="tz-city">Vancouver</span>
-                            <span class="tz-offset">PDT (UTC-7)</span>
-                            <span class="tz-diff">-15h from SG</span>
-                        </div>
-                        <div class="tz-item">
-                            <span class="tz-city">Banff / Jasper / Calgary</span>
-                            <span class="tz-offset">MDT (UTC-6)</span>
-                            <span class="tz-diff">-14h from SG</span>
-                        </div>
-                        <div class="tz-item">
-                            <span class="tz-city">Montreal / Quebec City</span>
-                            <span class="tz-offset">EDT (UTC-4)</span>
-                            <span class="tz-diff">-12h from SG</span>
-                        </div>
-                        <div class="tz-item">
-                            <span class="tz-city">Doha</span>
-                            <span class="tz-offset">AST (UTC+3)</span>
-                            <span class="tz-diff">-5h from SG</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Itinerary -->
 <section class="section itinerary-section" id="itinerary">
     <div class="container">
         <h2 class="section-title">&#128467;&#65039; Day-by-Day Itinerary</h2>
-
-        <!-- DAY 0 - HK LAYOVER -->
-        <div class="day-card" id="day-0" data-phase="transit">
-            <div class="day-header">
-                <div class="day-number">0</div>
-                <div class="day-info">
-                    <h3>Hong Kong Layover (7 hrs)</h3>
-                    <span class="day-date">May 23</span>
-                    <span class="day-badge badge-flight">&#9992; Transit</span>
-                </div>
-            </div>
-            <div class="day-body">
-                <p class="day-note">Quick city trip! Victoria Harbour skyline is a bucket-list night photo.</p>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d0-1"><span>CX758 &mdash; arrive HK 5:35 PM</span><span class="time-tag flight">5:35 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-2"><span>Clear immigration (~30 min)</span><span class="time-tag">6:00 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-3"><span>Airport Express to Kowloon station (22 min, ~HK$105/pp)</span><span class="time-tag">6:15 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-3b"><span>MTR Kowloon &rarr; Prince Edward station (10 min)</span><span class="time-tag">6:40 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-5"><span>One Dim Sum &mdash; Michelin-recommended, locals' favourite! Prince Edward station (15 min MTR from TST) ~HK$80/pp</span><span class="time-tag dining">7:00 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d0-5a"><span>Must try: har gow, siu mai, char siu bao, steamed rice rolls</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d0-5b"><span>Other TST options: Dim Dim Sum (5 min walk, open till 12 AM)</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d0-5c"><span>After dim sum: Honolulu Coffee Shop for egg tarts + milk tea (~HK$45)</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d0-5d"><span>Or: Kam Wah Cafe for polo bun (pineapple bun) (~HK$40)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-4"><span>MTR Prince Edward &rarr; TST (5 min) &mdash; walk to waterfront for skyline photos!</span><span class="time-tag">7:45 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d0-4b"><span>Bring 24-70mm + tripod &mdash; night skyline is stunning</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-6"><span>Symphony of Lights show &mdash; daily laser show from TST promenade (free)</span><span class="time-tag">8:00 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d0-6b"><span>Optional: Temple Street Night Market (10 min walk from TST)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-7"><span>Airport Express back to HKIA</span><span class="time-tag">9:30 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-8"><span>Cathay Pacific lounge &mdash; shower, eat, recharge before 11hr flight</span><span class="time-tag">10:00 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d0-9"><span>CX888 &mdash; 00:45 HK &rarr; Vancouver (arrive May 23, 21:25)</span><span class="time-tag flight">00:45 AM</span></label>
-                </div>
-            </div>
-        </div>
 
         <!-- DAY 1 -->
         <div class="day-card" id="day-1" data-phase="vancouver">
@@ -399,7 +189,6 @@
                     <label class="check-item"><input type="checkbox" data-id="d1-2"><span>Taxi to Airbnb</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d1-3"><span>Check in</span></label>
                     <label class="check-item sub"><input type="checkbox" data-id="d1-4"><span>Optional: Coal Harbour waterfront walk</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d1-5"><span>Late night food: grab something on Commercial Drive (near Airbnb, lots of options)</span><span class="time-tag dining">Snack</span></label>
                 </div>
             </div>
         </div>
@@ -416,15 +205,13 @@
             </div>
             <div class="day-body">
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d2-0"><span>&#9935;&#65039; Sunday Mass &mdash; St. Joseph's Parish, 1612 E 18th Ave (walkable from Airbnb). 8 AM</span><span class="time-tag">8 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d2-1"><span>Lynn Canyon Park &mdash; FREE suspension bridge, waterfalls, 30 Foot Pool</span><span class="time-tag">11:15 AM-1 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d2-0b"><span>Transport: Bus + SeaBus + Bus 228 (~1h 15min each way). Leave 10 AM, back at Waterfront ~2:20 PM</span><span class="time-tag">Transport</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d2-3"><span>Gastown lunch &mdash; 2 min walk from Waterfront SeaBus (after Lynn Canyon)</span><span class="time-tag">Lunch ~2:30 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d2-3b"><span>Try: Meat &amp; Bread (sandwiches), Revolver Coffee, or Nuba (Lebanese)</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d2-1"><span>Capilano Suspension Bridge</span><span class="time-tag">Morning</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d2-2"><span>Stanley Park e-bike ride</span><span class="time-tag">Late morning</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d2-3"><span>Granville Island Market</span><span class="time-tag">Lunch</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d2-4"><span>Gastown</span><span class="time-tag">Afternoon</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d2-5"><span>Porsche 911 pickup</span><span class="time-tag">6 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d2-6"><span>Spanish Banks sunset drive &mdash; top down!</span><span class="time-tag">Sunset</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d2-7"><span>Back to Airbnb</span><span class="time-tag">Evening</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d2-7b"><span>Dinner: grab food on Commercial Drive (near Airbnb)</span><span class="time-tag dining">Dinner</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d2-6"><span>Spanish Banks sunset drive</span><span class="time-tag">Sunset</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d2-7"><span>Blue Water Cafe</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
         </div>
@@ -440,24 +227,12 @@
                 </div>
             </div>
             <div class="day-body">
-                <p class="day-note">Sea-to-Sky in a Porsche 911 Cabriolet &mdash; the drive itself is the attraction. Top down, ocean views, mountains ahead!</p>
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d3-0"><span>Leave Vancouver (~8:30 AM) &mdash; Hwy 99 direct, enjoy the coastal drive</span><span class="time-tag">Start</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-2b"><span>Shannon Falls &mdash; 335m waterfall, right off highway (0 extra km, 10 min stop)</span><span class="time-tag">~9:30 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-3"><span>Sea-to-Sky Gondola &mdash; summit trails &amp; suspension bridge (BOOKED)</span><span class="time-tag">~9:45 AM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d3-3b"><span>Optional: Stawamus Chief viewpoint (from gondola)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-4"><span>Lunch in Squamish &mdash; Howe Sound Brewing (craft beer + burgers) or Locavore Bar &amp; Grill</span><span class="time-tag dining">Lunch ~12 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-5"><span>Drive back to Vancouver (~1 hr)</span><span class="time-tag">~1 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-5b"><span>&#9981;&#65039; Fill up petrol (full tank) &mdash; stop at Shell/Petro-Canada on the way back before returning car</span><span class="time-tag">Before return</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-6"><span>Return Porsche at Marriott Pinnacle (1156 West Hastings St)</span><span class="time-tag">~2:30 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-7"><span>Walk to Aquabus dock on Hornby St (10 min south)</span><span class="time-tag">~2:45 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-8"><span>Aquabus ferry to Granville Island (~$4.25/pp, 5 min boat ride)</span><span class="time-tag">~3:00 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-9"><span>Granville Island Public Market &mdash; food stalls, artisan shops, buskers</span><span class="time-tag">3:15-5:30 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d3-9b"><span>Try: Lee's Donuts, oyster bar, chowder bread bowl</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-10"><span>Aquabus back &rarr; walk to Waterfront Station &rarr; SkyTrain to Commercial-Broadway</span><span class="time-tag">~5:45 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-11"><span>Dinner: Continental Seafood Restaurant &mdash; 11700 Cambie Rd, Richmond</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-12"><span>Pack bags for Calgary tomorrow &mdash; leave Airbnb by 9 AM, SkyTrain to YVR</span><span class="time-tag">Evening</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d3-13"><span>Online check-in for WS112 (11:45 AM flight)</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d3-1"><span>Whytecliff Park</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d3-2"><span>Porteau Cove</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d3-3"><span>Sea-to-Sky Gondola</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d3-4"><span>Araxi (Whistler)</span><span class="time-tag dining">Lunch</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d3-5"><span>Return Porsche</span><span class="time-tag">Evening</span></label>
                 </div>
             </div>
         </div>
@@ -475,13 +250,10 @@
             </div>
             <div class="day-body">
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d4-1"><span>WS114 &mdash; 12:45 &rarr; 15:15 (Premium seats 1D &amp; 1F) Ref: AVZOVL</span><span class="time-tag flight">Flight</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d4-2"><span>Pick up BMW 3 Series</span><span class="time-tag">3:45 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d4-2b"><span>MEC Calgary (830 10 Ave SW) &mdash; hiking boots for wife! Merrell Moab 3 or Salomon X Ultra 4 recommended</span><span class="time-tag">4:15 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d4-3"><span>Drive to Canmore (~1 hr via Hwy 1 West)</span><span class="time-tag">~5 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d4-3b"><span>Check into Everwild Hotel</span><span class="time-tag">~6 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d4-4"><span>Crazyweed Kitchen</span><span class="time-tag dining">6:30 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d4-4b"><span>Alt: Rocky Mountain Flatbread Co &mdash; wood-fired pizza, casual</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d4-1"><span>WS112 &mdash; 11:45 &rarr; 14:15</span><span class="time-tag flight">Flight</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d4-2"><span>Pick up BMW 3 Series</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d4-3"><span>Drive to Canmore</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d4-4"><span>Crazyweed Kitchen</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
         </div>
@@ -501,10 +273,8 @@
                     <label class="check-item"><input type="checkbox" data-id="d5-1"><span>Surprise Corner</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d5-2"><span>Hoodoos viewpoint</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d5-3"><span>Johnston Canyon hike</span><span class="time-tag">Hike</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d5-3b"><span>Lunch: Bear Street Tavern — great pizza &amp; local beers</span><span class="time-tag dining">Lunch</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d5-4"><span>Banff Upper Hot Springs</span><span class="time-tag">Afternoon</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d5-5"><span>The Bison Restaurant</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d5-5b"><span>Alt: Park Distillery — comfort food, house-made spirits</span></label>
                     <label class="check-item star"><input type="checkbox" data-id="d5-6"><span>&#11088; Vermilion Lakes sunset</span><span class="time-tag">Sunset</span></label>
                 </div>
             </div>
@@ -525,9 +295,8 @@
                     <label class="check-item"><input type="checkbox" data-id="d6-1"><span>Lake Minnewanka scenic loop</span><span class="time-tag">Morning</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d6-2"><span>Two Jack Lake</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d6-3"><span>Maple Leaf Steakhouse</span><span class="time-tag dining">Lunch</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d6-3b"><span>Alt: Nourish Bistro — fresh bowls &amp; wraps, affordable</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d6-4"><span>Cascade Gardens</span><span class="time-tag">Afternoon</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d6-5"><span>Banff Gondola &mdash; 6:30 PM (booked via Trip.com, 2 pax)</span><span class="time-tag">6:30 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d6-5"><span>Banff Gondola</span><span class="time-tag">Evening</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d6-6"><span>Sky Bistro</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
@@ -544,22 +313,15 @@
                 </div>
             </div>
             <div class="day-body">
-                <p class="day-note">Relaxed morning! Skip the early stops, drive direct to the 2 best viewpoints then Emerald Lake.</p>
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d7-0"><span>Pack bags &amp; load BMW</span><span class="time-tag">~8:30 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-0b"><span>Check out Everwild Canmore Hotel</span><span class="time-tag">~9:00 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-4b"><span>Breakfast in Canmore (Main St cafe)</span><span class="time-tag dining">~9:30 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-3"><span>Castle Mountain &mdash; best photo pulloff on Bow Valley Parkway</span><span class="time-tag">~10:45 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-4"><span>Morant's Curve &mdash; famous train photo spot</span><span class="time-tag">~11:00 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-5a"><span>Arrive Emerald Lake &mdash; shoot from shore/bridge with camera gear (CPL filter!)</span><span class="time-tag">~11:45 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-5b"><span>Lock camera in BMW, grab phone + waterproof pouch</span><span class="time-tag">~12:15 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-5"><span>Queue + canoe on Emerald Lake (phone only, enjoy the moment!)</span><span class="time-tag">~12:30 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-5c"><span>Back on shore &mdash; grab camera, shoot lakeshore trail reflections</span><span class="time-tag">~1:30 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-6"><span>Natural Bridge &mdash; 10 min drive from Emerald Lake</span><span class="time-tag">~2:00 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-6b"><span>Spiral Tunnels viewpoint &mdash; watch trains spiral through the mountain (10 min, Hwy 1)</span><span class="time-tag">~2:20 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-7"><span>Wapta Falls &mdash; widest waterfall in the Rockies! 30 min flat trail each way</span><span class="time-tag">~2:45 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d7-8"><span>Back to Field Airbnb &mdash; relax!</span><span class="time-tag">~4:30 PM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d7-9"><span>Emerald Lake canoe &mdash; try again tomorrow (Day 8/9) if weather clears?</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-1"><span>Storm Mountain</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-2"><span>Moose Meadows</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-3"><span>Castle Mountain</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-4"><span>Morant's Curve</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-5"><span>Emerald Lake Canoe</span><span class="time-tag">9:30 AM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-6"><span>Natural Bridge</span><span class="time-tag">Afternoon</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-7"><span>Takakkaw Falls</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d7-8"><span>Check into Field Airbnb</span><span class="time-tag">Evening</span></label>
                 </div>
             </div>
         </div>
@@ -601,7 +363,6 @@
                     <label class="check-item"><input type="checkbox" data-id="d9-1"><span>Sleep in &#128564;</span></label>
                     <label class="check-item sub"><input type="checkbox" data-id="d9-2"><span>Optional: Emerald Lake revisit</span></label>
                     <label class="check-item sub"><input type="checkbox" data-id="d9-3"><span>Optional: Walk Kicking Horse River</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d9-4a"><span>&#9935;&#65039; Sunday Mass &mdash; St. Mary of the Assumption, Banff (125 Banff Ave, ~1 hr drive). Typical Sunday: 10:30 AM. OR St. Anthony's Canmore (Sat Vigil 5 PM / Sun 9 AM / 11 AM). Verify at stmarybanff.org / catholiccanmore.com</span><span class="time-tag">10:30 AM</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d9-4"><span>Truffle Pigs Bistro</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
@@ -631,11 +392,9 @@
                     <label class="check-item star"><input type="checkbox" data-id="d10-9"><span>&#11088; Big Bend</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d10-10"><span>Panther Falls</span></label>
                     <label class="check-item star"><input type="checkbox" data-id="d10-11"><span>&#11088; Parker Ridge Glacier</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d10-12"><span>Glacier View Lodge check-in (4 PM onwards, Upper Parking Lot)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d10-12b"><span>Welcome reception &mdash; cocktail &amp; charcuterie</span><span class="time-tag">5-7 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d10-12c"><span>&#127956; Glacier Skywalk &mdash; gather Moraine Lounge 6:45 PM, boarding 6:55 PM</span><span class="time-tag">6:55 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d10-13"><span>Altitude Restaurant &mdash; reservation required at check-in!</span><span class="time-tag dining">8 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d10-14"><span>Glacier stargazing from Moraine Lounge or Viewing Deck</span><span class="time-tag">Night</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d10-12"><span>Glacier View Lodge (~6:30 PM)</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d10-13"><span>Altitude Restaurant</span><span class="time-tag dining">Dinner</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d10-14"><span>Glacier stargazing</span><span class="time-tag">Night</span></label>
                 </div>
             </div>
         </div>
@@ -652,17 +411,12 @@
             </div>
             <div class="day-body">
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d11-0"><span>Complimentary breakfast at Altitude Restaurant</span><span class="time-tag dining">7-8:30 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d11-0b"><span>Check out at Front Desk</span><span class="time-tag">9:30 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d11-1"><span>&#129482; Ice Explorer Glacier Tour &mdash; boarding 9:45 AM, walk on Athabasca Glacier</span><span class="time-tag">10 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d11-1b"><span>Return to Glacier Discovery Centre, departure 11:45 AM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d11-1"><span>Ice Explorer glacier tour</span><span class="time-tag">Morning</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d11-2"><span>Sunwapta Falls</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d11-3"><span>Goats & Glaciers viewpoint</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d11-4"><span>Athabasca Falls</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d11-5"><span>Evil Dave's Grill — eclectic comfort food, great value</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d11-5b"><span>Alt: Jasper Brewing Co — burgers, wings &amp; house-brewed beer</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d11-6"><span>Lac Beauvert sunset walk &mdash; emerald lake at Fairmont Jasper Park Lodge (free)</span><span class="time-tag">Evening</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d11-6b"><span>Stargazing from Old Fort Point &mdash; Dark Sky Preserve, no light pollution</span><span class="time-tag">Night</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d11-5"><span>Dinner in Jasper town</span><span class="time-tag dining">Dinner</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d11-6"><span>Jasper Planetarium</span><span class="time-tag">Evening</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d11-7"><span>Drive to Hinton Airbnb</span></label>
                 </div>
             </div>
@@ -673,25 +427,19 @@
             <div class="day-header">
                 <div class="day-number">12</div>
                 <div class="day-info">
-                    <h3>Maligne Lake Day</h3>
+                    <h3>Maligne Canyon & Lake</h3>
                     <span class="day-date">June 3</span>
                     <span class="day-badge badge-jasper">Jasper</span>
                 </div>
             </div>
             <div class="day-body">
-                <p class="day-note">Lazy morning! Only hard deadline is 3:30 PM leave for Spirit Island Cruise.</p>
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d12-0a"><span>Wake up, shower, get ready</span><span class="time-tag">9:00 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-0b"><span>Drive Hinton &rarr; Jasper (~45 min)</span><span class="time-tag">10:00 AM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-0"><span>Bear's Paw Bakery &mdash; brunch + famous cinnamon buns</span><span class="time-tag dining">~11:00 AM</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d12-1"><span>Optional: Edith &amp; Annette Lakes loop &mdash; 4 km, 5 min from town. Skip if lazy!</span><span class="time-tag">~12:00 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-3"><span>&#9888;&#65039; LEAVE Jasper for Maligne Lake (45 min drive, don't be late!)</span><span class="time-tag">3:30 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-3b"><span>Arrive Maligne Lake &mdash; park, walk to dock (15 min buffer)</span><span class="time-tag">4:15 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-4"><span>&#128674; Spirit Island Cruise &mdash; board 4:45 PM, departs 5:00 PM sharp!</span><span class="time-tag">4:45 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-4b"><span>Cruise returns ~6:30 PM &mdash; golden hour photos at the dock!</span><span class="time-tag">~6:30 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-5"><span>Drive back to Jasper (45 min) &mdash; stop at Medicine Lake if still light</span><span class="time-tag">~7:15 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-5b"><span>Raven Bistro dinner</span><span class="time-tag dining">~8:00 PM</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d12-6"><span>Stargazing from Old Fort Point or drive to Hinton (Medicine Lake is far for a late night)</span><span class="time-tag">Night</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d12-1"><span>Maligne Canyon hike</span><span class="time-tag">Hike</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d12-2"><span>Wilderness Kitchen</span><span class="time-tag dining">Lunch</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d12-3"><span>Maligne Lake</span><span class="time-tag">Afternoon</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d12-4"><span>Spirit Island cruise</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d12-5"><span>Raven Bistro</span><span class="time-tag dining">Dinner</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d12-6"><span>Medicine Lake stargazing</span><span class="time-tag">Night</span></label>
                 </div>
             </div>
         </div>
@@ -709,10 +457,8 @@
             <div class="day-body">
                 <div class="checklist">
                     <label class="check-item"><input type="checkbox" data-id="d13-1"><span>Miette Hot Springs</span><span class="time-tag">Morning</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d13-1b"><span>Lunch: Jasper Brewing Co — burgers &amp; house beers</span><span class="time-tag dining">Lunch</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d13-2"><span>Jasper SkyTram &mdash; UP 2:09 PM, DOWN 4:15 PM (booked, 2 pax)</span><span class="time-tag">2:09 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d13-2"><span>Jasper SkyTram</span><span class="time-tag">Afternoon</span></label>
                     <label class="check-item star"><input type="checkbox" data-id="d13-3"><span>&#11088; Pyramid Island sunset</span><span class="time-tag">Sunset</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d13-4"><span>Dinner: Downstream Restaurant — riverside patio</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
         </div>
@@ -728,13 +474,21 @@
                 </div>
             </div>
             <div class="day-body">
+                <p class="day-note">Walmart + eat at home first, then Jasper for hike + sunset + aurora!</p>
                 <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="d14-1"><span>Valley of the Five Lakes hike</span><span class="time-tag">Hike</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d14-1b"><span>Lunch: Patricia Street Deli — sandwiches &amp; soups, perfect post-hike</span><span class="time-tag dining">Lunch</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d14-2"><span>Patricia Lake</span><span class="time-tag">Afternoon</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d14-3"><span>Pyramid Lake</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d14-4"><span>Syrahs of Jasper</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d14-4b"><span>Alt: Downstream Restaurant — riverside patio, casual fine dining</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-0a"><span>Wake up, shower, get ready</span><span class="time-tag">9:00 AM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-0b"><span>Walmart Hinton &mdash; snacks, supplies, waterproof phone pouch</span><span class="time-tag">10:00 AM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-0c"><span>Back to Airbnb &mdash; cook &amp; eat lunch at home</span><span class="time-tag">10:30 AM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-0d"><span>Drive Hinton &rarr; Jasper (45 min)</span><span class="time-tag">12:00 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-1"><span>Valley of the Five Lakes hike (4.5 km loop, ~1.5 hrs)</span><span class="time-tag">1:00 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-1c"><span>Horseshoe Lake &mdash; hidden turquoise gem, 5 min from Five Lakes trailhead</span><span class="time-tag">~2:30 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-3b"><span>Jasper town &mdash; coffee, souvenirs, walk around</span><span class="time-tag">~3:00 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-4"><span>Light dinner: Syrahs of Jasper (or skip if still full)</span><span class="time-tag dining">~5:30 PM</span></label>
+                    <label class="check-item sub"><input type="checkbox" data-id="d14-4b"><span>Alt: Jasper Brewing Co or Patricia Street Deli for something quick</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-5"><span>Drive to Pyramid Island &mdash; set up tripod, scout composition</span><span class="time-tag">8:30 PM</span></label>
+                    <label class="check-item star"><input type="checkbox" data-id="d14-6"><span>&#11088; Pyramid Island sunset (~9:55 PM) &mdash; bring wide-angle + tripod!</span><span class="time-tag">9:40 PM</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-7"><span>&#129321; Aurora hunting! Stay at Pyramid Lake, face north. Check dashboard for Kp index</span><span class="time-tag">~10:30 PM+</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d14-8"><span>Drive back to Hinton Airbnb</span><span class="time-tag">~11:30 PM</span></label>
                 </div>
             </div>
         </div>
@@ -753,8 +507,7 @@
                 <div class="checklist">
                     <label class="check-item"><input type="checkbox" data-id="d15-1"><span>Pyramid Lake</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d15-2"><span>Jasper town</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d15-3"><span>Fiddle River — fresh seafood with mountain views</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d15-3b"><span>Alt: Jasper Pizza Place — wood-fired, casual &amp; cozy</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d15-3"><span>Final Rockies dinner</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
         </div>
@@ -771,13 +524,9 @@
             </div>
             <div class="day-body">
                 <div class="checklist">
-                    <label class="check-item sub"><input type="checkbox" data-id="d16-0"><span>Grab pastries from Bear's Paw before leaving Jasper</span><span class="time-tag dining">Breakfast</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d16-0b"><span>&#9935;&#65039; Sunday Mass &mdash; Our Lady of Lourdes Parish, 414 Patricia Street Jasper. Typical: Sun 10:30 AM. Verify at rcdstp.ab.ca</span><span class="time-tag">10:30 AM</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d16-1"><span>Abraham Lake stop</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d16-1b"><span>Lunch: Rocky Mountain House — Petro-Canada rest stop area</span><span class="time-tag">Lunch</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d16-2"><span>Drop BMW at YYC</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d16-3"><span>Hampton Inn Calgary Airport</span><span class="time-tag">Hotel</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d16-4"><span>Dinner: Hotel restaurant or nearby Big T's BBQ &amp; Smokehouse</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
         </div>
@@ -799,8 +548,7 @@
                     <label class="check-item"><input type="checkbox" data-id="d17-2"><span>Pick up BMW X4M (3:30 PM)</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d17-3"><span>Drive Montreal &rarr; Quebec City</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d17-4"><span>Montmorency Falls stop</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d17-5"><span>Le Chic Shack — gourmet burgers &amp; poutine in Old Quebec</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d17-5b"><span>Alt: Paillard — bakery-cafe, fresh salads &amp; pastries</span></label>
+                    <label class="check-item"><input type="checkbox" data-id="d17-5"><span>Dinner in Old Quebec</span><span class="time-tag dining">Dinner</span></label>
                 </div>
             </div>
         </div>
@@ -817,7 +565,6 @@
             </div>
             <div class="day-body">
                 <div class="checklist">
-                    <label class="check-item sub"><input type="checkbox" data-id="d18-0"><span>Breakfast: Le Cochon Dingue — famous French breakfast &amp; crêpes</span><span class="time-tag dining">Breakfast</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d18-1"><span>Ch&acirc;teau Frontenac</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d18-2"><span>Terrasse Dufferin</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d18-3"><span>Petit Champlain</span></label>
@@ -840,14 +587,11 @@
             </div>
             <div class="day-body">
                 <div class="checklist">
-                    <label class="check-item sub"><input type="checkbox" data-id="d19-0"><span>Brunch: L'Avenue — famous Montreal brunch spot, huge portions</span><span class="time-tag dining">Brunch</span></label>
                     <label class="check-item star"><input type="checkbox" data-id="d19-1"><span>&#11088; Mount Royal Lookout</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d19-2"><span>Return BMW X4M (3:30 PM)</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d19-3"><span>Notre Dame Basilica</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d19-4"><span>Old Port walk</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d19-5"><span>Crew Collective Cafe</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="d19-6"><span>Schwartz's Deli — iconic smoked meat sandwich (est. 1928)</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d19-6b"><span>Alt: Damas — Syrian cuisine, beautiful space, mid-range</span></label>
                 </div>
             </div>
         </div>
@@ -867,9 +611,7 @@
                     <label class="check-item"><input type="checkbox" data-id="d20-1"><span>St-Viateur Bagel</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d20-2"><span>Fairmount Bagel</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d20-3"><span>Jean Talon Market</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d20-3b"><span>Lunch: La Banquise — famous 24hr poutine (30+ varieties!)</span><span class="time-tag dining">Lunch</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d20-4"><span>Joe Beef</span><span class="time-tag dining">Dinner</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d20-4b"><span>Alt: Le Vin Papillon — Joe Beef's casual wine bar next door</span></label>
                 </div>
             </div>
         </div>
@@ -888,8 +630,6 @@
             <div class="day-body">
                 <div class="checklist">
                     <label class="check-item"><input type="checkbox" data-id="d21-1"><span>Montreal Botanical Garden</span><span class="time-tag">Morning</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d21-1b"><span>Last lunch: Olive et Gourmando — best sandwiches in Old Montreal. ~$16</span><span class="time-tag dining">Lunch</span></label>
-                    <label class="check-item sub"><input type="checkbox" data-id="d21-1c"><span>Last treat: Juliette et Chocolat — artisan hot chocolate &amp; cr&ecirc;pes</span></label>
                     <label class="check-item"><input type="checkbox" data-id="d21-2"><span>QR764 &mdash; 21:35 Montreal &rarr; Doha</span><span class="time-tag flight">Flight</span></label>
                 </div>
             </div>
@@ -933,1351 +673,11 @@
     </div>
 </section>
 
-<!-- "This Time Tomorrow" Widget -->
-<section class="section tomorrow-section" id="tomorrow">
-    <div class="container">
-        <div class="tomorrow-card" id="tomorrow-card" style="display:none;">
-            <div class="tomorrow-label">&#128336; This time tomorrow...</div>
-            <div class="tomorrow-content" id="tomorrow-content"></div>
-        </div>
-    </div>
-</section>
-
-<!-- Packing Checklist -->
-<section class="section packing-section" id="packing">
-    <div class="container">
-        <h2 class="section-title">&#127890; Packing Checklist</h2>
-        <p class="section-subtitle">Detailed his &amp; hers lists for 23 days across 4 climates</p>
-        <div class="packing-grid">
-
-            <!-- HIS -->
-            <div class="packing-card packing-his">
-                <h4>&#128084; His &mdash; Clothing</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-h1"><span>Down jacket / puffer (Rockies mornings 1-5&deg;C)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h2"><span>Fleece / mid-layer jacket</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h3"><span>Rain jacket / windbreaker (waterproof)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h4"><span>4-5 t-shirts (mix casual + athletic)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h5"><span>2 long-sleeve shirts / henleys</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h6"><span>1 hoodie / sweatshirt</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h7"><span>2 pairs hiking pants / convertible pants</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h8"><span>2 pairs jeans / casual pants</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h9"><span>1 pair shorts (Montreal will be 22&deg;C+)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h10"><span>Swim trunks (hot springs x2!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h11"><span>7 underwear</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h12"><span>5 pairs socks (3 hiking wool + 2 regular)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h13"><span>Thermal base layer top + bottom (for 3:45 AM Lake Louise)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h14"><span>1 smart casual dinner outfit (Sky Bistro, Blue Water, Joe Beef)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h15"><span>1 collared shirt / button-down</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h16"><span>Pyjamas</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-his">
-                <h4>&#128094; His &mdash; Shoes & Accessories</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-h17"><span>Hiking boots (broken in! waterproof)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h18"><span>Comfortable walking shoes / trainers</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h19"><span>Flip flops / sandals (hot springs, showers)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h20"><span>1 pair smart shoes (dinners)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h21"><span>Sunglasses (polarized for glacier glare)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h22"><span>Beanie / warm hat</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h23"><span>Baseball cap / sun hat</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h24"><span>Gloves (thin, for early mornings)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h25"><span>Belt</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h26"><span>Watch</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-his">
-                <h4>&#128700; His &mdash; Toiletries</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-h27"><span>Toothbrush + toothpaste</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h28"><span>Deodorant</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h29"><span>Shampoo + body wash (travel size)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h30"><span>Razor + shaving cream</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h31"><span>Hair product / comb</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h32"><span>Cologne (small bottle)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h33"><span>Moisturizer (dry mountain air!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h34"><span>Sunscreen SPF 50+ (UV is strong at altitude)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h35"><span>Lip balm with SPF</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-h36"><span>Contact lenses + solution / spare glasses</span></label>
-                </div>
-            </div>
-
-            <!-- HERS -->
-            <div class="packing-card packing-hers">
-                <h4>&#128087; Hers &mdash; Clothing</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-s1"><span>Down jacket / puffer (Rockies mornings 1-5&deg;C)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s2"><span>Fleece / mid-layer (cozy for evenings)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s3"><span>Rain jacket / windbreaker (waterproof)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s4"><span>4-5 tops (mix casual + layerable)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s5"><span>2 long-sleeve tops / turtlenecks</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s6"><span>1 cardigan / wrap (for flights + restaurants)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s7"><span>2 pairs hiking pants / leggings</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s8"><span>2 pairs jeans / casual pants</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s9"><span>1-2 pairs shorts (Montreal warm days)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s10"><span>1-2 dresses / nice outfits (Sky Bistro, Blue Water, Joe Beef)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s11"><span>Swimsuit (hot springs x2!) + cover-up</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s12"><span>7 underwear + 3-4 bras (1 sports bra)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s13"><span>5 pairs socks (3 hiking wool + 2 regular)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s14"><span>Thermal base layer top + leggings (for 3:45 AM Lake Louise)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s15"><span>1 scarf / pashmina (restaurants, church, flights)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s16"><span>Pyjamas</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-hers">
-                <h4>&#128096; Hers &mdash; Shoes & Accessories</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-s17"><span>Hiking boots (broken in! waterproof)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s18"><span>Comfortable walking shoes / trainers</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s19"><span>Flip flops / sandals (hot springs, showers)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s20"><span>1 pair nice flats / heels (dinners)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s21"><span>Sunglasses</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s22"><span>Beanie / warm hat</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s23"><span>Sun hat / wide brim (glacier sun)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s24"><span>Gloves (thin, for early mornings)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s25"><span>Small crossbody bag (daily sightseeing)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s26"><span>Hair ties / clips / headband</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s27"><span>Jewellery for dinners (minimal for travel)</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-hers">
-                <h4>&#128132; Hers &mdash; Toiletries & Beauty</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-s28"><span>Toothbrush + toothpaste</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s29"><span>Shampoo + conditioner (travel size)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s30"><span>Body wash + loofah</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s31"><span>Deodorant</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s32"><span>Skincare (cleanser, toner, moisturizer)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s33"><span>Sunscreen SPF 50+ (face + body)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s34"><span>Lip balm with SPF</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s35"><span>Makeup bag (foundation, concealer, mascara, lipstick)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s36"><span>Makeup remover / micellar water</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s37"><span>Hair dryer (check if Airbnb has one)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s38"><span>Hair straightener / curler (compact)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s39"><span>Perfume (travel size)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s40"><span>Razor / wax strips</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s41"><span>Contact lenses + solution / spare glasses</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s42"><span>Feminine hygiene products</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-s43"><span>Sheet masks (long flights)</span></label>
-                </div>
-            </div>
-
-            <!-- SHARED -->
-            <div class="packing-card packing-shared">
-                <h4>&#128138; Shared &mdash; Health & Medicine</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-m1"><span>Prescription meds (enough for 23 days + spare)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m2"><span>Panadol / Paracetamol / Ibuprofen</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m3"><span>Antihistamines (allergies, bug bites)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m4"><span>Motion sickness pills (winding mountain roads)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m5"><span>Plasters / band-aids (hiking blisters)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m6"><span>Insect repellent (mosquitoes near lakes)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m7"><span>Hand sanitizer</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m8"><span>Throat lozenges (dry mountain air)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m9"><span>Diarrhea meds (Imodium)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-m10"><span>Vitamins / supplements</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-photo">
-                <h4>&#128248; Pro Photography Gear</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-p1"><span>Primary camera body</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p2"><span>Backup camera body (or second body)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p3"><span>Wide-angle lens (14-24mm or 16-35mm) &mdash; landscapes, astro, waterfalls</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p4"><span>Standard zoom (24-70mm) &mdash; versatile, street, food, portraits</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p5"><span>Telephoto zoom (70-200mm) &mdash; compressed landscapes, Spirit Island, wildlife</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p6"><span>Fast prime (35mm or 50mm f/1.4) &mdash; low light, night, romantic shots</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p7"><span>Carbon fiber tripod (ESSENTIAL for astro, sunrise, waterfalls)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p8"><span>CPL (circular polarizing) filter &mdash; MUST for turquoise lakes!</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p9"><span>ND filters (6-stop + 10-stop) &mdash; waterfalls, long exposure</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p10"><span>GND filters &mdash; sunrise/sunset sky balance</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p11"><span>Remote shutter / intervalometer &mdash; astro, timelapse, long exposure</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p12"><span>Camera batteries x4+ (cold drains fast in Rockies!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p13"><span>Memory cards (256GB+ recommended, multiple cards)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p14"><span>Card reader + portable SSD/HDD for daily backups</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p15"><span>Lens cleaning kit (blower, cloth, pen) &mdash; mountain dust &amp; water spray</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p16"><span>Sensor cleaning kit</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p17"><span>Rain cover for camera + lens</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p18"><span>Camera bag / insert that fits in daypack</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p19"><span>Red headlamp (preserves night vision for astrophotography)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p20"><span>GoPro + mount (for Porsche Sea-to-Sky drive!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p21"><span>Laptop for editing + backup (Lightroom/Capture One)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-p22"><span>Calibrated portable monitor (optional)</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-photo">
-                <h4>&#127775; Astro / Night Photography</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-a1"><span>Fast wide lens (f/2.8 or wider) &mdash; Milky Way at Icefield/Jasper</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a2"><span>Star tracker (iOptron SkyGuider or similar) &mdash; optional but amazing for Milky Way core</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a3"><span>Intervalometer / remote trigger</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a4"><span>Dew heater strip (prevents lens fog at night)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a5"><span>Extra warm layers for night shoots (3+ hours outside in 1-5&deg;C)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a6"><span>Hand warmers (for hands AND tape to battery to keep it warm)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a7"><span>Phone app: PhotoPills or Stellarium (plan Milky Way position)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-a8"><span>Download dark sky maps for Columbia Icefield &amp; Medicine Lake</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-shared">
-                <h4>&#128268; Shared &mdash; Other Tech</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-t4"><span>Phone chargers x2 (his + hers)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-t5"><span>USB-C car charger cable</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-t6"><span>Power bank (20,000mAh+ recommended)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-t7"><span>Universal power adapter x2 (Type A/B for Canada)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-t9"><span>Headphones x2 (flights + road trips)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-t10"><span>Bluetooth speaker (small, for Airbnb evenings)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-t12"><span>AUX cable / Bluetooth FM transmitter (for Porsche!)</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-shared">
-                <h4>&#128196; Shared &mdash; Travel Documents</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-d1"><span>Passports x2 (6+ months validity past June 14)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d2"><span>Canada eTA confirmation x2 (screenshot + printed)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d3"><span>Travel insurance policy + emergency hotline number</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d4"><span>Flight e-tickets / boarding passes (all 5 flights)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d5"><span>Car rental confirmations x3 (Porsche, BMW, X4M)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d6"><span>Accommodation confirmations x8 (all stays)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d7"><span>Activity bookings (gondola, SkyTram, Spirit Island, etc.)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d8"><span>Driver's license (Singapore, check if IDP needed)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d9"><span>Credit cards x2-3 (notify banks of travel!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d10"><span>Canadian dollars cash (~$200-250 CAD — Canada is 95% cashless, just for tips &amp; emergencies)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d11"><span>Emergency contact card (written, in case phone dies)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-d12"><span>Copy of all docs in Google Drive / iCloud (backup!)</span></label>
-                </div>
-            </div>
-
-            <div class="packing-card packing-shared">
-                <h4>&#127956; Shared &mdash; Outdoor & Travel</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pk-o1"><span>Daypack / hiking backpack (25-30L)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o2"><span>Reusable water bottles x2</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o3"><span>Bear spray (buy in Banff/Canmore, can't fly with it)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o4"><span>Binoculars (wildlife + stargazing)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o5"><span>Travel towels x2 (quick-dry, for hot springs)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o6"><span>Tote bags / reusable bags (markets, shopping)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o7"><span>Ziploc bags (wet clothes, snacks, phone protection)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o8"><span>Travel pillows x2 (long flights SIN-HKG-YVR)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o9"><span>Eye masks + ear plugs x2 (flights + Airbnbs)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o10"><span>Compression packing cubes (keeps luggage organized)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o11"><span>Foldable umbrella</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o12"><span>Snacks from home (for road trips + flights)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o13"><span>Laundry bag (separate dirty clothes)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pk-o14"><span>Small padlock (for luggage)</span></label>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- Restaurant Reservations -->
-<section class="section reservations-section" id="reservations">
-    <div class="container">
-        <h2 class="section-title">&#127860; Restaurant Reservations</h2>
-        <p class="section-subtitle">Top spots that need booking + must-try casual gems (no reservation needed)</p>
-        <div class="reservations-grid">
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Book ASAP</div>
-                <h4>Joe Beef</h4>
-                <p class="res-day">Day 20 &mdash; June 11</p>
-                <p class="res-loc">Montreal</p>
-                <p class="res-note">Legendary &mdash; one of Canada's hardest reservations</p>
-                <label class="check-item"><input type="checkbox" data-id="res-1"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Book ASAP</div>
-                <h4>Blue Water Cafe</h4>
-                <p class="res-day">Day 2 &mdash; May 24</p>
-                <p class="res-loc">Vancouver</p>
-                <p class="res-note">Top seafood in Vancouver &mdash; books up weeks ahead</p>
-                <label class="check-item"><input type="checkbox" data-id="res-2"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Book ASAP</div>
-                <h4>Sky Bistro</h4>
-                <p class="res-day">Day 6 &mdash; May 28</p>
-                <p class="res-loc">Banff Gondola summit</p>
-                <p class="res-note">Dinner at the top &mdash; very popular, limited seats</p>
-                <label class="check-item"><input type="checkbox" data-id="res-3"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>Araxi</h4>
-                <p class="res-day">Day 3 &mdash; May 25</p>
-                <p class="res-loc">Whistler</p>
-                <p class="res-note">Award-winning &mdash; popular on weekends</p>
-                <label class="check-item"><input type="checkbox" data-id="res-4"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>The Bison Restaurant</h4>
-                <p class="res-day">Day 5 &mdash; May 27</p>
-                <p class="res-loc">Banff</p>
-                <p class="res-note">Popular Banff spot &mdash; book a few days ahead</p>
-                <label class="check-item"><input type="checkbox" data-id="res-5"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>Syrahs of Jasper</h4>
-                <p class="res-day">Day 14 &mdash; June 5</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">Fine dining &mdash; small restaurant</p>
-                <label class="check-item"><input type="checkbox" data-id="res-6"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Recommended</div>
-                <h4>Modavie</h4>
-                <p class="res-day">Day 18 &mdash; June 9</p>
-                <p class="res-loc">Old Montreal</p>
-                <p class="res-note">Live jazz &mdash; nice to have a table ready</p>
-                <label class="check-item"><input type="checkbox" data-id="res-7"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Recommended</div>
-                <h4>Chez Boulay</h4>
-                <p class="res-day">Day 18 &mdash; June 9</p>
-                <p class="res-loc">Quebec City</p>
-                <p class="res-note">Boreal cuisine &mdash; worth booking</p>
-                <label class="check-item"><input type="checkbox" data-id="res-8"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>Evil Dave's Grill</h4>
-                <p class="res-day">Day 11 &mdash; June 2</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">Eclectic comfort food, quirky vibe &mdash; small &amp; popular</p>
-                <label class="check-item"><input type="checkbox" data-id="res-9"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>Fiddle River</h4>
-                <p class="res-day">Day 15 &mdash; June 6</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">Fresh seafood &amp; mountain views &mdash; perfect last Rockies dinner</p>
-                <label class="check-item"><input type="checkbox" data-id="res-10"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Recommended</div>
-                <h4>Crazyweed Kitchen</h4>
-                <p class="res-day">Day 4 &mdash; May 26</p>
-                <p class="res-loc">Canmore</p>
-                <p class="res-note">Global flavours, locally loved &mdash; book for dinner</p>
-                <label class="check-item"><input type="checkbox" data-id="res-11"><span>Reserved</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Recommended</div>
-                <h4>Raven Bistro</h4>
-                <p class="res-day">Day 12 &mdash; June 3</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">Mediterranean tapas, cozy &amp; affordable</p>
-                <label class="check-item"><input type="checkbox" data-id="res-12"><span>Reserved</span></label>
-            </div>
-        </div>
-
-        <h3 class="must-try-header">&#129316; Must-Try &mdash; No Reservation Needed</h3>
-        <p class="section-subtitle" style="margin-top:-8px">Just walk in! These are iconic &amp; affordable</p>
-        <div class="reservations-grid">
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Schwartz's Deli</h4>
-                <p class="res-day">Day 19 &mdash; June 10</p>
-                <p class="res-loc">Montreal</p>
-                <p class="res-note">Iconic smoked meat sandwich since 1928. ~$12. Expect a short queue &mdash; it's worth it</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>La Banquise</h4>
-                <p class="res-day">Day 20 &mdash; June 11</p>
-                <p class="res-loc">Montreal</p>
-                <p class="res-note">THE poutine spot. 30+ varieties, open 24 hrs. ~$15. Must try the Classic or La Dan Dan</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>St-Viateur Bagel</h4>
-                <p class="res-day">Day 20 &mdash; June 11</p>
-                <p class="res-loc">Montreal (Mile End)</p>
-                <p class="res-note">Wood-fired bagels baked 24/7 since 1957. ~$2 each. Get sesame &amp; poppy seed</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Bear's Paw Bakery</h4>
-                <p class="res-day">Day 12 &mdash; June 3</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">Famous sticky cinnamon buns. ~$5. Get there early, they sell out!</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Laggan's Bakery</h4>
-                <p class="res-day">Day 8 &mdash; May 30</p>
-                <p class="res-loc">Lake Louise</p>
-                <p class="res-note">Mountain bakery with huge portions. Try the ham &amp; cheese croissant. ~$10</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Le Chic Shack</h4>
-                <p class="res-day">Day 17 &mdash; June 8</p>
-                <p class="res-loc">Old Quebec City</p>
-                <p class="res-note">Gourmet burgers &amp; poutine in the heart of Old Quebec. ~$18</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Jasper Brewing Co</h4>
-                <p class="res-day">Days 11-15</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">First national park brewery. Great burgers, wings &amp; house beers. ~$20</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Bear Street Tavern</h4>
-                <p class="res-day">Day 5 &mdash; May 27</p>
-                <p class="res-loc">Banff</p>
-                <p class="res-note">Best pizza in Banff &amp; 30+ craft beers. ~$18. Try the Wild Mushroom pizza</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Le Cochon Dingue</h4>
-                <p class="res-day">Day 18 &mdash; June 9</p>
-                <p class="res-loc">Quebec City</p>
-                <p class="res-note">Famous French breakfast &amp; cr&ecirc;pes in Petit Champlain. ~$15</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>L'Avenue</h4>
-                <p class="res-day">Day 19 &mdash; June 10</p>
-                <p class="res-loc">Montreal</p>
-                <p class="res-note">Best brunch in Montreal. Huge portions, fun decor. ~$18. Go early to avoid the line</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Park Distillery</h4>
-                <p class="res-day">Day 5 &mdash; May 27</p>
-                <p class="res-loc">Banff</p>
-                <p class="res-note">Campfire comfort food &amp; house-distilled spirits. Try the campfire fondue. ~$22</p>
-            </div>
-            <div class="reservation-card must-try">
-                <div class="res-priority">Walk In</div>
-                <h4>Truffle Pigs Bistro</h4>
-                <p class="res-day">Day 9 &mdash; May 31</p>
-                <p class="res-loc">Field (Yoho)</p>
-                <p class="res-note">Only restaurant in tiny Field. Surprisingly excellent. ~$20</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Activity Bookings -->
-<section class="section bookings-section" id="bookings">
-    <div class="container">
-        <h2 class="section-title">&#127903;&#65039; Activity Bookings</h2>
-        <p class="section-subtitle">These attractions need advance booking &mdash; reserve early to avoid sold-out days</p>
-        <div class="reservations-grid">
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Book ASAP</div>
-                <h4>&#128674; Spirit Island Cruise</h4>
-                <p class="res-day">Day 12 &mdash; June 3 &bull; 5:00 PM (board 4:45 PM)</p>
-                <p class="res-loc">Maligne Lake, Jasper</p>
-                <p class="res-note">Booked via Pursuit. Golden hour cruise &mdash; sunset 9:53 PM, best photos of the trip! 2 pax</p>
-                <label class="check-item"><input type="checkbox" data-id="book-1" checked><span>Booked &#9989;</span></label>
-            </div>
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Already Included</div>
-                <h4>&#129482; Ice Explorer Glacier Tour</h4>
-                <p class="res-day">Day 11 &mdash; June 2 &bull; 10:00 AM</p>
-                <p class="res-loc">Columbia Icefield</p>
-                <p class="res-note">&#9989; Included with Glacier View Lodge stay! Boarding 9:45 AM after breakfast &amp; check-out</p>
-                <label class="check-item"><input type="checkbox" data-id="book-2" checked><span>Included with stay</span></label>
-            </div>
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Already Included</div>
-                <h4>&#127956; Glacier Skywalk</h4>
-                <p class="res-day">Day 10 &mdash; June 1 &bull; 6:55 PM</p>
-                <p class="res-loc">Sunwapta Valley</p>
-                <p class="res-note">&#9989; Included with Glacier View Lodge stay! 280m glass cliff-edge walkway. Boarding 6:45 PM at Moraine Lounge</p>
-                <label class="check-item"><input type="checkbox" data-id="book-15" checked><span>Included with stay</span></label>
-            </div>
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Book ASAP</div>
-                <h4>&#128674; Emerald Lake Canoe</h4>
-                <p class="res-day">Day 7 &mdash; May 29</p>
-                <p class="res-loc">Yoho NP</p>
-                <p class="res-note">~$90/hour. Limited canoes, books out fast. 9:30 AM slot already planned. Book on emeraldlakelodge.com</p>
-                <label class="check-item"><input type="checkbox" data-id="book-3"><span>Booked</span></label>
-            </div>
-            <div class="reservation-card priority-high">
-                <div class="res-priority">Book ASAP</div>
-                <h4>&#128652; Moraine Lake Shuttle</h4>
-                <p class="res-day">Day 10 &mdash; June 1</p>
-                <p class="res-loc">Lake Louise &rarr; Moraine</p>
-                <p class="res-note">11:30 AM slot. NO private cars allowed. Parks Canada shuttle, ~$8/pp. Book on parks.canada.ca</p>
-                <label class="check-item"><input type="checkbox" data-id="book-4" checked><span>Already booked &#9989;</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>&#128747; Banff Gondola</h4>
-                <p class="res-day">Day 6 &mdash; May 28</p>
-                <p class="res-loc">Sulphur Mountain</p>
-                <p class="res-note">$88 CAD/pp. Booked via Trip.com for 6:30 PM. Sky Bistro dinner at 7:15 PM. Down by 9:30 PM</p>
-                <label class="check-item"><input type="checkbox" data-id="book-5" checked><span>Booked &#9989; (Trip.com, 2 pax)</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>&#128747; Jasper SkyTram</h4>
-                <p class="res-day">Day 13 &mdash; June 4 &bull; UP 2:09 PM / DOWN 4:15 PM</p>
-                <p class="res-loc">Whistlers Mountain</p>
-                <p class="res-note">Booked via banffjaspercollection.com. ~2 hrs for boardwalk, summit hike (1.4km) &amp; Summit Caf&eacute;</p>
-                <label class="check-item"><input type="checkbox" data-id="book-6" checked><span>Booked &#9989;</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>&#128747; Sea-to-Sky Gondola</h4>
-                <p class="res-day">Day 3 &mdash; May 25</p>
-                <p class="res-loc">Squamish</p>
-                <p class="res-note">~$60 CAD/pp. Online tickets cheaper than walk-up. Book on seatoskygondola.com</p>
-                <label class="check-item"><input type="checkbox" data-id="book-7"><span>Booked</span></label>
-            </div>
-            <div class="reservation-card priority-med">
-                <div class="res-priority">Book Early</div>
-                <h4>&#128690; Stanley Park E-Bike Rental</h4>
-                <p class="res-day">Day 2 &mdash; May 24</p>
-                <p class="res-loc">Vancouver</p>
-                <p class="res-note">~$45 CAD for 2 hours. Cycle City Tours or Spokes Bike Rentals. Book online or arrive early</p>
-                <label class="check-item"><input type="checkbox" data-id="book-9"><span>Booked</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Walk In OK</div>
-                <h4>&#9832;&#65039; Banff Upper Hot Springs</h4>
-                <p class="res-day">Day 5 &mdash; May 27</p>
-                <p class="res-loc">Banff</p>
-                <p class="res-note">~$17 CAD/pp. No reservation needed, but online tickets save the queue. Bring towel or rent one</p>
-                <label class="check-item"><input type="checkbox" data-id="book-11"><span>Tickets ready</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Walk In OK</div>
-                <h4>&#9832;&#65039; Miette Hot Springs</h4>
-                <p class="res-day">Day 13 &mdash; June 4</p>
-                <p class="res-loc">Jasper</p>
-                <p class="res-note">~$17 CAD/pp. Hottest springs in Rockies. No reservation needed. Bring towel or rent</p>
-                <label class="check-item"><input type="checkbox" data-id="book-12"><span>Tickets ready</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Important</div>
-                <h4>&#127795; Parks Canada Discovery Pass</h4>
-                <p class="res-day">All Rockies days (4-16)</p>
-                <p class="res-loc">Banff &bull; Yoho &bull; Jasper</p>
-                <p class="res-note">Get the <strong>Family/Group pass ~$151 CAD</strong> — covers whole vehicle (up to 7), only $1 more than 2 adult passes. Buy at Banff park gate on Day 4</p>
-                <label class="check-item"><input type="checkbox" data-id="book-13"><span>Got it</span></label>
-            </div>
-            <div class="reservation-card priority-low">
-                <div class="res-priority">Optional</div>
-                <h4>&#128747; Whistler Peak-to-Peak Gondola</h4>
-                <p class="res-day">Day 3 &mdash; May 25</p>
-                <p class="res-loc">Whistler</p>
-                <p class="res-note">~$83 CAD/pp. World's longest unsupported span. Only if you have time after Sea-to-Sky</p>
-                <label class="check-item"><input type="checkbox" data-id="book-14"><span>Decided / booked</span></label>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Aurora Monitor -->
-<section class="section aurora-section" id="aurora">
-    <div class="container">
-        <h2 class="section-title">&#129321; Aurora Monitor</h2>
-        <p class="section-subtitle">Live data from NOAA Space Weather &mdash; refreshes every 15 minutes</p>
-
-        <div class="aurora-main-card">
-            <div class="aurora-gauge-container">
-                <div class="aurora-kp-ring" id="aurora-kp-ring">
-                    <div class="aurora-kp-value" id="aurora-kp-value">--</div>
-                    <div class="aurora-kp-label">Kp Index</div>
-                </div>
-            </div>
-            <div class="aurora-status">
-                <div class="aurora-status-text" id="aurora-status">Loading aurora data...</div>
-                <div class="aurora-updated" id="aurora-updated"></div>
-            </div>
-        </div>
-
-        <div class="aurora-locations-grid">
-            <div class="aurora-loc-card" id="aurora-jasper">
-                <div class="aurora-loc-header">
-                    <span class="aurora-loc-name">Jasper (52.9&deg;N)</span>
-                    <span class="aurora-loc-days">Days 11-15</span>
-                </div>
-                <div class="aurora-loc-bar-container">
-                    <div class="aurora-loc-bar" id="aurora-bar-jasper"></div>
-                </div>
-                <div class="aurora-loc-chance" id="aurora-chance-jasper">--</div>
-                <div class="aurora-loc-note">Best spot on your trip &mdash; Jasper Dark Sky Preserve, minimal light pollution</div>
-            </div>
-            <div class="aurora-loc-card" id="aurora-banff">
-                <div class="aurora-loc-header">
-                    <span class="aurora-loc-name">Banff / Lake Louise (51.2&deg;N)</span>
-                    <span class="aurora-loc-days">Days 5-10</span>
-                </div>
-                <div class="aurora-loc-bar-container">
-                    <div class="aurora-loc-bar" id="aurora-bar-banff"></div>
-                </div>
-                <div class="aurora-loc-chance" id="aurora-chance-banff">--</div>
-                <div class="aurora-loc-note">Vermilion Lakes &amp; Lake Minnewanka are top aurora spots</div>
-            </div>
-            <div class="aurora-loc-card" id="aurora-icefields">
-                <div class="aurora-loc-header">
-                    <span class="aurora-loc-name">Columbia Icefield (52.2&deg;N)</span>
-                    <span class="aurora-loc-days">Day 10</span>
-                </div>
-                <div class="aurora-loc-bar-container">
-                    <div class="aurora-loc-bar" id="aurora-bar-icefields"></div>
-                </div>
-                <div class="aurora-loc-chance" id="aurora-chance-icefields">--</div>
-                <div class="aurora-loc-note">Zero light pollution &mdash; if Kp is high, this is your best chance</div>
-            </div>
-        </div>
-
-        <div class="aurora-tips-card">
-            <h4>&#128161; Aurora Viewing Tips</h4>
-            <div class="aurora-tips-list">
-                <div class="aurora-tip">Look <strong>north</strong> with a clear horizon &mdash; low northern sky</div>
-                <div class="aurora-tip">Best time: <strong>11 PM &ndash; 3 AM</strong> (darkest hours)</div>
-                <div class="aurora-tip">Kp 3+ = possible on horizon at your latitude</div>
-                <div class="aurora-tip">Kp 5+ = good show likely overhead</div>
-                <div class="aurora-tip">Kp 7+ = spectacular &mdash; drop everything and look up!</div>
-                <div class="aurora-tip">Your phone camera sees auroras better than your eyes &mdash; try a long exposure</div>
-                <div class="aurora-tip">Check this page during your Rockies nights (Days 5-15) for real-time updates</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Stargazing Guide -->
-<section class="section stargazing-section" id="stargazing">
-    <div class="container">
-        <h2 class="section-title">&#127769; Stargazing Nights</h2>
-        <div class="stargazing-grid">
-            <div class="star-night-card">
-                <div class="star-night-header">
-                    <span class="star-moon" id="moon-d10">&#127764;</span>
-                    <div>
-                        <h4>Day 10 &mdash; June 1</h4>
-                        <p class="star-loc">Columbia Icefield, Glacier View Lodge</p>
-                    </div>
-                </div>
-                <div class="star-details">
-                    <div class="star-detail"><span class="star-label">Moon Phase</span><span id="moon-phase-10">Waxing Crescent (14%)</span></div>
-                    <div class="star-detail"><span class="star-label">Moonset</span><span>~11:30 PM</span></div>
-                    <div class="star-detail"><span class="star-label">Darkness</span><span class="star-quality star-excellent">Excellent</span></div>
-                    <div class="star-detail"><span class="star-label">Bortle Scale</span><span>Class 2 (pristine)</span></div>
-                    <div class="star-detail"><span class="star-label">Best for</span><span>Milky Way core visible after moonset</span></div>
-                </div>
-            </div>
-            <div class="star-night-card">
-                <div class="star-night-header">
-                    <span class="star-moon" id="moon-d12">&#127763;</span>
-                    <div>
-                        <h4>Day 12 &mdash; June 3</h4>
-                        <p class="star-loc">Medicine Lake, Jasper Dark Sky Preserve</p>
-                    </div>
-                </div>
-                <div class="star-details">
-                    <div class="star-detail"><span class="star-label">Moon Phase</span><span id="moon-phase-12">First Quarter (36%)</span></div>
-                    <div class="star-detail"><span class="star-label">Moonset</span><span>~1:00 AM</span></div>
-                    <div class="star-detail"><span class="star-label">Darkness</span><span class="star-quality star-good">Good (after moonset)</span></div>
-                    <div class="star-detail"><span class="star-label">Bortle Scale</span><span>Class 2 (Dark Sky Preserve)</span></div>
-                    <div class="star-detail"><span class="star-label">Best for</span><span>Jasper is the 2nd largest Dark Sky Preserve in the world</span></div>
-                </div>
-            </div>
-            <div class="star-night-card">
-                <div class="star-night-header">
-                    <span class="star-moon" id="moon-d13">&#127763;</span>
-                    <div>
-                        <h4>Day 13 &mdash; June 4</h4>
-                        <p class="star-loc">Pyramid Island, Jasper</p>
-                    </div>
-                </div>
-                <div class="star-details">
-                    <div class="star-detail"><span class="star-label">Moon Phase</span><span id="moon-phase-13">First Quarter (45%)</span></div>
-                    <div class="star-detail"><span class="star-label">Moonset</span><span>~1:30 AM</span></div>
-                    <div class="star-detail"><span class="star-label">Darkness</span><span class="star-quality star-good">Good (after moonset)</span></div>
-                    <div class="star-detail"><span class="star-label">Bortle Scale</span><span>Class 3</span></div>
-                    <div class="star-detail"><span class="star-label">Best for</span><span>Stars reflected in lake &mdash; incredible photos</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Driving Distances -->
-<section class="section driving-section" id="driving">
-    <div class="container">
-        <h2 class="section-title">&#128663; Driving Distances & Times</h2>
-        <div class="driving-table">
-            <div class="drive-row drive-header">
-                <span class="drive-route">Route</span>
-                <span class="drive-dist">Distance</span>
-                <span class="drive-time">Drive Time</span>
-                <span class="drive-day">Day</span>
-            </div>
-            <div class="drive-row"><span class="drive-route">Vancouver &rarr; Horseshoe Bay</span><span class="drive-dist">20 km</span><span class="drive-time">25m</span><span class="drive-day">D3</span></div>
-            <div class="drive-row"><span class="drive-route">Horseshoe Bay &rarr; Whytecliff Park</span><span class="drive-dist">3 km</span><span class="drive-time">5m</span><span class="drive-day">D3</span></div>
-            <div class="drive-row"><span class="drive-route">Whytecliff &rarr; Porteau Cove</span><span class="drive-dist">22 km</span><span class="drive-time">20m</span><span class="drive-day">D3</span></div>
-            <div class="drive-row"><span class="drive-route">Porteau Cove &rarr; Shannon Falls</span><span class="drive-dist">18 km</span><span class="drive-time">15m</span><span class="drive-day">D3</span></div>
-            <div class="drive-row"><span class="drive-route">Shannon Falls &rarr; Sea-to-Sky Gondola</span><span class="drive-dist">2 km</span><span class="drive-time">3m</span><span class="drive-day">D3</span></div>
-            <div class="drive-row"><span class="drive-route">Sea-to-Sky Gondola &rarr; Vancouver (return)</span><span class="drive-dist">65 km</span><span class="drive-time">55m</span><span class="drive-day">D3</span></div>
-            <div class="drive-row"><span class="drive-route">Calgary Airport &rarr; Canmore</span><span class="drive-dist">110 km</span><span class="drive-time">1h 10m</span><span class="drive-day">D4</span></div>
-            <div class="drive-row"><span class="drive-route">Canmore &rarr; Banff</span><span class="drive-dist">25 km</span><span class="drive-time">20m</span><span class="drive-day">D5</span></div>
-            <div class="drive-row"><span class="drive-route">Banff &rarr; Johnston Canyon</span><span class="drive-dist">25 km</span><span class="drive-time">25m</span><span class="drive-day">D5</span></div>
-            <div class="drive-row"><span class="drive-route">Banff &rarr; Field (Bow Valley Pkwy)</span><span class="drive-dist">85 km</span><span class="drive-time">1h 15m</span><span class="drive-day">D7</span></div>
-            <div class="drive-row"><span class="drive-route">Field &rarr; Lake Louise</span><span class="drive-dist">27 km</span><span class="drive-time">25m</span><span class="drive-day">D8</span></div>
-            <div class="drive-row highlight-drive"><span class="drive-route">&#11088; Lake Louise &rarr; Glacier View Lodge (Icefields Pkwy)</span><span class="drive-dist">130 km</span><span class="drive-time">2h (with stops)</span><span class="drive-day">D10</span></div>
-            <div class="drive-row"><span class="drive-route">Glacier View Lodge &rarr; Jasper</span><span class="drive-dist">105 km</span><span class="drive-time">1h 15m</span><span class="drive-day">D11</span></div>
-            <div class="drive-row"><span class="drive-route">Jasper &rarr; Maligne Lake</span><span class="drive-dist">48 km</span><span class="drive-time">45m</span><span class="drive-day">D12</span></div>
-            <div class="drive-row"><span class="drive-route">Jasper &rarr; Miette Hot Springs</span><span class="drive-dist">61 km</span><span class="drive-time">50m</span><span class="drive-day">D13</span></div>
-            <div class="drive-row"><span class="drive-route">Jasper &rarr; Calgary (via Abraham Lake)</span><span class="drive-dist">415 km</span><span class="drive-time">4h 30m</span><span class="drive-day">D16</span></div>
-            <div class="drive-row"><span class="drive-route">Montreal &rarr; Quebec City</span><span class="drive-dist">255 km</span><span class="drive-time">2h 45m</span><span class="drive-day">D17</span></div>
-            <div class="drive-row"><span class="drive-route">Quebec City &rarr; Montreal</span><span class="drive-dist">255 km</span><span class="drive-time">2h 45m</span><span class="drive-day">D18</span></div>
-        </div>
-        <p class="driving-total">Total driving: ~1,900 km across the trip</p>
-    </div>
-</section>
-
-<!-- Canada Tips & Safety -->
-<section class="section tips-section" id="tips">
-    <div class="container">
-        <h2 class="section-title">&#128218; Canada Tips & Safety</h2>
-        <div class="tips-grid">
-            <div class="tip-card tip-bear">
-                <h4>&#128059; Bear Safety (Rockies)</h4>
-                <ul>
-                    <li>Buy <strong>bear spray</strong> in Banff/Canmore (can't fly with it)</li>
-                    <li>Make noise on trails &mdash; clap, talk, sing</li>
-                    <li>Never approach or feed wildlife</li>
-                    <li>Store food in car trunk, never in cabin</li>
-                    <li>If you see a bear: stay calm, back away slowly, don't run</li>
-                    <li><strong>Black bear</strong>: make yourself big, be loud</li>
-                    <li><strong>Grizzly</strong>: play dead if it charges, protect neck</li>
-                </ul>
-            </div>
-            <div class="tip-card tip-tipping">
-                <h4>&#128176; Tipping Guide</h4>
-                <ul>
-                    <li><strong>Restaurants:</strong> 15-20% (expected, not optional)</li>
-                    <li><strong>Bars:</strong> $1-2 per drink or 15%</li>
-                    <li><strong>Taxis / Uber:</strong> 15%</li>
-                    <li><strong>Hotels:</strong> $2-5 per night housekeeping</li>
-                    <li><strong>Tour guides:</strong> 15-20% of tour cost</li>
-                    <li><strong>Valet:</strong> $2-5</li>
-                    <li>Tip is <em>before</em> tax in Canada</li>
-                </ul>
-            </div>
-            <div class="tip-card tip-driving">
-                <h4>&#128664; Driving Tips</h4>
-                <ul>
-                    <li><strong>Speed limits:</strong> 100-110 km/h highways, 50 km/h towns</li>
-                    <li>Icefields Parkway: 90 km/h, watch for wildlife</li>
-                    <li>Fuel up before Icefields Parkway (limited stations)</li>
-                    <li>Right turn on red is allowed (unless signed)</li>
-                    <li>Headlights on at all times (law in Canada)</li>
-                    <li>Watch for wildlife at dawn/dusk on mountain roads</li>
-                    <li>Park regulations: must stop for wildlife on road</li>
-                </ul>
-            </div>
-            <div class="tip-card tip-general">
-                <h4>&#127464;&#127462; General Tips</h4>
-                <ul>
-                    <li><strong>Currency:</strong> CAD ($1 SGD &asymp; $0.97 CAD)</li>
-                    <li>Tap-to-pay works almost everywhere</li>
-                    <li>Water is safe to drink from taps</li>
-                    <li><strong>Parks pass:</strong> Buy a Discovery Pass ($145 CAD) for all national parks</li>
-                    <li><strong>Tax:</strong> Not included in prices (5-15% depending on province)</li>
-                    <li>Download offline maps (no signal in mountain areas)</li>
-                    <li>Carry layers &mdash; mountain weather changes fast</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Currency Converter -->
-<section class="section currency-section" id="currency">
-    <div class="container">
-        <h2 class="section-title">&#128178; Currency Converter</h2>
-        <div class="currency-card">
-            <div class="currency-row">
-                <div class="currency-input-group">
-                    <label>SGD</label>
-                    <input type="number" id="sgd-input" placeholder="0.00" inputmode="decimal">
-                </div>
-                <span class="currency-arrow">&#8596;</span>
-                <div class="currency-input-group">
-                    <label>CAD</label>
-                    <input type="number" id="cad-input" placeholder="0.00" inputmode="decimal">
-                </div>
-            </div>
-            <div class="currency-rate" id="currency-rate">Loading rate...</div>
-            <div class="currency-quick">
-                <span class="currency-chip" data-sgd="10">$10</span>
-                <span class="currency-chip" data-sgd="20">$20</span>
-                <span class="currency-chip" data-sgd="50">$50</span>
-                <span class="currency-chip" data-sgd="100">$100</span>
-                <span class="currency-chip" data-sgd="200">$200</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- What to Wear Today -->
-<section class="section wear-section" id="wear-today">
-    <div class="container">
-        <h2 class="section-title">&#128090; What to Wear Today</h2>
-        <div class="wear-card" id="wear-card">
-            <div class="wear-loading">Checking today's activities and weather...</div>
-        </div>
-    </div>
-</section>
-
-<!-- Emergency Quick Dial -->
-<section class="section emergency-section" id="emergency">
-    <div class="container">
-        <h2 class="section-title">&#128680; Emergency Quick Dial</h2>
-        <div class="emergency-grid">
-            <a href="tel:911" class="emergency-btn emergency-red">
-                <span class="emergency-icon">&#128680;</span>
-                <span class="emergency-label">911</span>
-                <span class="emergency-desc">Canada Emergency</span>
-            </a>
-            <a href="tel:+16132412043" class="emergency-btn emergency-blue">
-                <span class="emergency-icon">&#127468;&#127475;</span>
-                <span class="emergency-label">Embassy</span>
-                <span class="emergency-desc">SG Embassy Ottawa</span>
-            </a>
-            <a href="tel:*4357" class="emergency-btn emergency-orange">
-                <span class="emergency-icon">&#128663;</span>
-                <span class="emergency-label">*HELP</span>
-                <span class="emergency-desc">Roadside Assist (AB)</span>
-            </a>
-            <a href="tel:511" class="emergency-btn emergency-teal">
-                <span class="emergency-icon">&#127956;</span>
-                <span class="emergency-label">511</span>
-                <span class="emergency-desc">Road Conditions</span>
-            </a>
-            <a href="tel:1-877-852-3100" class="emergency-btn emergency-green">
-                <span class="emergency-icon">&#127795;</span>
-                <span class="emergency-label">Parks</span>
-                <span class="emergency-desc">Parks Canada Emergency</span>
-            </a>
-            <a href="tel:+18884074747" class="emergency-btn emergency-purple">
-                <span class="emergency-icon">&#128156;</span>
-                <span class="emergency-label">Poison</span>
-                <span class="emergency-desc">Poison Control</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Parking Tips -->
-<section class="section parking-section" id="parking">
-    <div class="container">
-        <h2 class="section-title">&#127359;&#65039; Parking Tips</h2>
-        <div class="parking-grid">
-            <div class="parking-card parking-warn">
-                <h4>Moraine Lake &#9888;&#65039;</h4>
-                <p class="parking-day">Day 10</p>
-                <p><strong>NO public parking.</strong> Must take Parks Canada shuttle from Lake Louise. You have 11:30 AM shuttle booked. Park at Lake Louise overflow lot.</p>
-            </div>
-            <div class="parking-card parking-warn">
-                <h4>Lake Louise</h4>
-                <p class="parking-day">Day 8 &amp; 10</p>
-                <p>Lot fills by <strong>6 AM in summer</strong>. Your 3:45 AM wake-up should get you a spot. Overflow lot available. $21/day.</p>
-            </div>
-            <div class="parking-card">
-                <h4>Johnston Canyon</h4>
-                <p class="parking-day">Day 5</p>
-                <p>Arrive before 10 AM. Main lot fills fast. Overflow lot 1 km east on Bow Valley Parkway. Free.</p>
-            </div>
-            <div class="parking-card">
-                <h4>Lynn Canyon</h4>
-                <p class="parking-day">Day 2</p>
-                <p>Free parking lot at Lynn Canyon Park. No car needed &mdash; you're using public transit (Bus 228)</p>
-            </div>
-            <div class="parking-card">
-                <h4>Emerald Lake</h4>
-                <p class="parking-day">Day 7</p>
-                <p>Small lot fills by 10 AM on weekends. Your 9:30 AM canoe should be fine on a weekday. Free.</p>
-            </div>
-            <div class="parking-card">
-                <h4>Peyto Lake</h4>
-                <p class="parking-day">Day 10</p>
-                <p>New parking lot with $21 day pass (Parks pass may cover it). Short walk to viewpoint.</p>
-            </div>
-            <div class="parking-card">
-                <h4>Maligne Lake</h4>
-                <p class="parking-day">Day 12</p>
-                <p>Large free lot. Fills for Spirit Island cruises. Arrive 15 min before your cruise time.</p>
-            </div>
-            <div class="parking-card">
-                <h4>Takakkaw Falls</h4>
-                <p class="parking-day">Day 7</p>
-                <p>Road has tight switchbacks &mdash; no trailers. BMW 3 Series will be fine. Free lot at the falls.</p>
-            </div>
-            <div class="parking-card">
-                <h4>Old Montreal / Quebec</h4>
-                <p class="parking-day">Days 17-20</p>
-                <p>Street parking is tricky. Use Indigo lots ($15-25/day). Hotel parking if available. Download P$ app.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Live Weather (visible during trip) -->
-<section class="section weather-live-section" id="live-weather">
-    <div class="container">
-        <h2 class="section-title">&#127780;&#65039; Live Weather</h2>
-        <p class="section-subtitle">Current conditions &amp; 3-day forecast for your location</p>
-        <div class="weather-live-grid" id="weather-live-grid">
-            <div class="weather-loading">Loading weather data...</div>
-        </div>
-        <p class="weather-attribution" id="weather-attribution"></p>
-    </div>
-</section>
-
-<!-- Gas Stations - Icefields Parkway -->
-<section class="section gas-section" id="gas-stations">
-    <div class="container">
-        <h2 class="section-title">&#9981;&#65039; Gas Stations &mdash; Icefields Parkway</h2>
-        <p class="section-subtitle">Fuel up! Very limited stations on this 230 km stretch</p>
-        <div class="gas-warning">&#9888;&#65039; IMPORTANT: Fill up before starting the Icefields Parkway. The stretch between Saskatchewan Crossing and Jasper has NO gas stations (130 km).</div>
-        <div class="gas-timeline">
-            <div class="gas-station">
-                <div class="gas-dot gas-major"></div>
-                <div class="gas-info">
-                    <h4>Lake Louise Village</h4>
-                    <p>Petro-Canada &bull; Last major station before the Parkway</p>
-                    <span class="gas-tag">&#9989; Fill up here (Day 10, ~3 PM)</span>
-                </div>
-            </div>
-            <div class="gas-station">
-                <div class="gas-dot gas-minor"></div>
-                <div class="gas-info">
-                    <h4>Saskatchewan River Crossing</h4>
-                    <p>The Crossing Resort &bull; 77 km from Lake Louise</p>
-                    <span class="gas-tag">Only gas for 130 km &mdash; top up if below half tank</span>
-                </div>
-            </div>
-            <div class="gas-station">
-                <div class="gas-dot gas-none"></div>
-                <div class="gas-info">
-                    <h4>Columbia Icefield &rarr; Jasper</h4>
-                    <p>No gas stations on this 130 km stretch</p>
-                    <span class="gas-tag gas-tag-warn">&#9888;&#65039; No fuel available</span>
-                </div>
-            </div>
-            <div class="gas-station">
-                <div class="gas-dot gas-major"></div>
-                <div class="gas-info">
-                    <h4>Jasper Town</h4>
-                    <p>Petro-Canada &bull; Shell &bull; Multiple stations</p>
-                    <span class="gas-tag">&#9989; Refuel when you arrive</span>
-                </div>
-            </div>
-        </div>
-        <div class="gas-other">
-            <h4>Other Key Fuel Stops</h4>
-            <div class="gas-other-grid">
-                <div class="gas-mini"><strong>Canmore</strong> &mdash; Fill before entering parks (Day 4)</div>
-                <div class="gas-mini"><strong>Banff</strong> &mdash; Petro-Canada in town</div>
-                <div class="gas-mini"><strong>Field (Yoho)</strong> &mdash; Small station, limited hours</div>
-                <div class="gas-mini"><strong>Hinton</strong> &mdash; Multiple stations near Jasper (Day 11+)</div>
-                <div class="gas-mini"><strong>Rocky Mountain House</strong> &mdash; Last stop before Abraham Lake (Day 16)</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Souvenir Shopping Checklist -->
-<section class="section souvenir-section" id="souvenirs">
-    <div class="container">
-        <h2 class="section-title">&#127873; Souvenir Checklist</h2>
-        <p class="section-subtitle">Must-buy items &amp; where to get them. Buy at supermarkets, not tourist shops!</p>
-        <div class="packing-grid">
-            <div class="packing-card packing-shared">
-                <h4>&#127809; Must-Buy Canadian</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="sv-1"><span>Maple syrup (Grade A Amber, tin can) &mdash; Safeway/Save-On ~$10-15</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-2"><span>Maple butter &mdash; spreads like peanut butter, amazing</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-3"><span>Maple candies / maple leaf cookies &mdash; great gifts ~$8</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-4"><span>Ice wine (vin de glace) &mdash; unique Canadian dessert wine ~$20-30</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-5"><span>Parks Canada patches / stickers &mdash; from park visitor centres ~$5-8</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-6"><span>Parks Canada hat or toque &mdash; great quality ~$25</span></label>
-                </div>
-            </div>
-            <div class="packing-card" style="border-top: 3px solid var(--rockies);">
-                <h4>&#127956; Rockies Souvenirs</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="sv-7"><span>Indigenous art (carvings, prints, dreamcatchers) &mdash; authentic shops only ~$15-40</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-8"><span>Rocky Mountain Soap (handmade, Canmore/Banff) ~$8-12</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-9"><span>Banff or Jasper hoodie / toque &mdash; from local shops, not generic ones</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-10"><span>Wildflower honey (local Rockies bees) ~$10</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-11"><span>Empty bear spray canister as memento (free!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-12"><span>Yoho / Banff / Jasper fridge magnets ~$5</span></label>
-                </div>
-            </div>
-            <div class="packing-card" style="border-top: 3px solid var(--quebec);">
-                <h4>&#127987; Quebec &amp; Montreal Souvenirs</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="sv-13"><span>Quebec ice wine &mdash; Petit Champlain shops ~$20-30</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-14"><span>Handmade pottery / ceramics &mdash; Rue du Petit-Champlain artisans</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-15"><span>Poutine seasoning mix &mdash; Jean Talon Market ~$5</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-16"><span>Smoked meat spice rub &mdash; Schwartz's or Jean Talon ~$10</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-17"><span>Montreal bagel take-home kit &mdash; St-Viateur shop ~$10</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-18"><span>Local art prints &mdash; Mile End galleries</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-19"><span>Juliette et Chocolat artisan chocolates &mdash; gift box ~$15</span></label>
-                </div>
-            </div>
-            <div class="packing-card" style="border-top: 3px solid #ef5350;">
-                <h4>&#9888;&#65039; Singapore Customs Reminder</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="sv-20"><span>&#9989; CAN bring: maple syrup, candies, sealed spices, art, clothing, non-perishables</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-21"><span>&#10060; CANNOT bring: fresh cheese, raw meat, fruits, vegetables, plants</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-22"><span>&#127863; Alcohol limit: 1L per person duty-free (2 bottles of ice wine total)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-23"><span>&#128176; Duty-free allowance: S$600 per person (you qualify &mdash; away 23 days)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="sv-24"><span>&#128230; Pack maple syrup in CHECKED luggage (liquid &gt;100ml)</span></label>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Offline Maps Checklist -->
-<section class="section offline-maps-section" id="offline-maps">
-    <div class="container">
-        <h2 class="section-title">&#128246; Offline Maps to Download</h2>
-        <p class="section-subtitle">Download these Google Maps areas before the trip &mdash; signal is unreliable in the mountains</p>
-        <div class="offline-maps-grid">
-            <div class="offline-map-card">
-                <h4>&#128205; Vancouver &amp; Sea-to-Sky</h4>
-                <p>Days 1-3</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-1"><span>Vancouver city</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-2"><span>Sea-to-Sky Highway &rarr; Whistler</span></label>
-            </div>
-            <div class="offline-map-card">
-                <h4>&#128205; Banff &amp; Canmore</h4>
-                <p>Days 4-6</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-3"><span>Calgary &rarr; Canmore &rarr; Banff</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-4"><span>Lake Minnewanka area</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-5"><span>Johnston Canyon / Bow Valley Pkwy</span></label>
-            </div>
-            <div class="offline-map-card">
-                <h4>&#128205; Yoho &amp; Lake Louise</h4>
-                <p>Days 7-9</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-6"><span>Field / Emerald Lake / Takakkaw</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-7"><span>Lake Louise &amp; Moraine Lake</span></label>
-            </div>
-            <div class="offline-map-card critical">
-                <h4>&#128205; Icefields Parkway &#9888;&#65039;</h4>
-                <p>Day 10 &mdash; CRITICAL, no signal for most of this drive</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-8"><span>Lake Louise &rarr; Columbia Icefield</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-9"><span>Columbia Icefield &rarr; Jasper</span></label>
-            </div>
-            <div class="offline-map-card">
-                <h4>&#128205; Jasper Area</h4>
-                <p>Days 11-15</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-10"><span>Jasper town &amp; surrounds</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-11"><span>Maligne Lake &amp; Canyon</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-12"><span>Miette Hot Springs area</span></label>
-            </div>
-            <div class="offline-map-card">
-                <h4>&#128205; Jasper &rarr; Calgary</h4>
-                <p>Day 16</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-13"><span>Hwy 11 via Abraham Lake</span></label>
-            </div>
-            <div class="offline-map-card">
-                <h4>&#128205; Quebec &amp; Montreal</h4>
-                <p>Days 17-21</p>
-                <label class="check-item"><input type="checkbox" data-id="omap-14"><span>Montreal &rarr; Quebec City (Hwy 20)</span></label>
-                <label class="check-item"><input type="checkbox" data-id="omap-15"><span>Montreal city</span></label>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Pre-Departure Countdown Checklist -->
-<section class="section predeparture-section" id="predeparture">
-    <div class="container">
-        <h2 class="section-title">&#128338; Pre-Departure Checklist</h2>
-        <p class="section-subtitle">Things to do before you fly out on May 23</p>
-        <div class="predeparture-grid">
-            <div class="predeparture-card">
-                <h4>&#128197; 30+ Days Before</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-1"><span>Apply for Canada eTA (~$7 CAD, instant approval usually)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-2"><span>Check passport validity (6+ months past June 14)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-3"><span>Buy travel insurance (essential for Canada!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-4"><span>Book all accommodations</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-5"><span>Reserve Porsche 911, BMW 3 Series, BMW X4M</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-6"><span>Book Moraine Lake Shuttle (Day 10)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-7"><span>Book Spirit Island Cruise (Day 12)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-30-8"><span>Book all key restaurants (Joe Beef, Blue Water, Sky Bistro, etc.)</span></label>
-                </div>
-            </div>
-            <div class="predeparture-card">
-                <h4>&#128197; 14 Days Before</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-1"><span>Notify bank(s) of travel dates (avoid card blocks)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-2"><span>Get Canadian dollars cash ($200-300 for tips, emergencies)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-3"><span>Arrange SIM/eSIM for Canada (Rogers/Telus or Airalo eSIM)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-4"><span>Book Banff Gondola &amp; Jasper SkyTram tickets</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-5"><span>Download offline maps (Google Maps areas &mdash; see Offline Maps section)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-6"><span>Refill any prescription meds needed for trip</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-14-7"><span>Email itinerary to family as emergency backup</span></label>
-                </div>
-            </div>
-            <div class="predeparture-card">
-                <h4>&#128197; 7 Days Before</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-1"><span>Web check-in for CX758 (Singapore &rarr; Hong Kong)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-2"><span>Confirm all accommodation check-in times</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-3"><span>Print/save e-tickets for rentals, tours, hotels</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-4"><span>Screenshot eTA approval, insurance info, passport pages</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-5"><span>Start packing (see Packing Checklist section)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-6"><span>Check weather forecast &amp; adjust packing</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-7-7"><span>Arrange house-sitting / mail hold / pet care</span></label>
-                </div>
-            </div>
-            <div class="predeparture-card">
-                <h4>&#128197; Day Before / Departure Day</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-1"><span>Web check-in for CX888 (Hong Kong &rarr; Vancouver)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-2"><span>Charge all devices, power banks</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-3"><span>Pack carry-on: passport, cards, meds, chargers, change of clothes</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-4"><span>Set out-of-office / away replies</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-5"><span>Download Netflix/Spotify offline for long flights</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-6"><span>Turn off home main water/gas valves if desired</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="pre-1-7"><span>Arrive Changi 3 hours early (10:25 AM for 13:25 CX758)</span></label>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Export to Google Maps -->
-<section class="section export-section" id="export-maps">
-    <div class="container">
-        <h2 class="section-title">&#128190; Export to Google Maps</h2>
-        <p class="section-subtitle">Download all 70+ destinations as a KML file for Google My Maps</p>
-        <div class="export-card">
-            <p class="export-description">
-                Get a permanent custom map of your entire trip &mdash; all viewpoints, restaurants, hikes, and stops with descriptions.
-                Works offline once downloaded, easy to share with your wife, and looks great!
-            </p>
-            <button class="export-btn" id="export-kml-btn">
-                &#11015;&#65039; Download Trip Map (KML)
-            </button>
-            <div class="export-steps">
-                <h4>How to import:</h4>
-                <ol>
-                    <li>Go to <strong>mymaps.google.com</strong></li>
-                    <li>Click <strong>+ Create New Map</strong></li>
-                    <li>Click <strong>Import</strong> under the "Untitled layer"</li>
-                    <li>Upload the downloaded <code>.kml</code> file</li>
-                    <li>Name your map "Canada Honeymoon 2026" and save!</li>
-                    <li>On phone: open Google Maps &rarr; Saved &rarr; Maps &rarr; find your custom map</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Airport Gate-to-Gate Timing -->
-<section class="section airport-section" id="airports">
-    <div class="container">
-        <h2 class="section-title">&#128747; Airport Timing Guide</h2>
-        <p class="section-subtitle">Realistic times for each airport &mdash; plan accordingly!</p>
-        <div class="airport-grid">
-            <div class="airport-card">
-                <div class="airport-code">SIN</div>
-                <h4>Changi Airport (Singapore)</h4>
-                <p class="airport-flight">CX758 to HK &bull; 13:25 departure</p>
-                <div class="airport-times">
-                    <div class="airport-time"><span>Arrive airport</span><strong>10:25 AM (3 hrs early)</strong></div>
-                    <div class="airport-time"><span>Check-in / bag drop</span><strong>~20 min</strong></div>
-                    <div class="airport-time"><span>Security + immigration</span><strong>~20 min</strong></div>
-                    <div class="airport-time"><span>Walk to gate</span><strong>~15 min</strong></div>
-                </div>
-                <p class="airport-tip">&#128161; Changi is massive, but efficient. Terminal 1 for Cathay.</p>
-            </div>
-            <div class="airport-card">
-                <div class="airport-code">HKG</div>
-                <h4>Hong Kong (Transit)</h4>
-                <p class="airport-flight">CX888 to YVR &bull; 00:45 departure</p>
-                <div class="airport-times">
-                    <div class="airport-time"><span>Arrival from SIN</span><strong>17:35</strong></div>
-                    <div class="airport-time"><span>Connection time</span><strong>~7 hours (long!)</strong></div>
-                    <div class="airport-time"><span>Lounge access</span><strong>Cathay Lounges (The Wing/The Pier)</strong></div>
-                </div>
-                <p class="airport-tip">&#128161; Long layover &mdash; shower at the lounge, grab dinner, recharge.</p>
-            </div>
-            <div class="airport-card">
-                <div class="airport-code">YVR</div>
-                <h4>Vancouver Airport</h4>
-                <p class="airport-flight">Arrival CX888 21:25 &bull; Depart WS112 11:45 (May 26)</p>
-                <div class="airport-times">
-                    <div class="airport-time"><span>Arrival immigration</span><strong>~20-30 min</strong></div>
-                    <div class="airport-time"><span>Customs + baggage</span><strong>~20 min</strong></div>
-                    <div class="airport-time"><span>Exit to taxi/rideshare</span><strong>~5 min</strong></div>
-                    <div class="airport-time"><span>Depart: arrive 2 hrs early</span><strong>9:45 AM on May 26</strong></div>
-                </div>
-                <p class="airport-tip">&#128161; YVR has ArriveCAN / Primary Inspection Kiosks &mdash; use them to skip the line.</p>
-            </div>
-            <div class="airport-card">
-                <div class="airport-code">YYC</div>
-                <h4>Calgary Airport</h4>
-                <p class="airport-flight">Arrival WS112 14:15 &bull; Depart PD384 08:00 (June 8)</p>
-                <div class="airport-times">
-                    <div class="airport-time"><span>Arrival to car rental</span><strong>~15-20 min</strong></div>
-                    <div class="airport-time"><span>Drop car (June 7)</span><strong>Allow 30 min before hotel</strong></div>
-                    <div class="airport-time"><span>Depart: arrive 2 hrs early</span><strong>6:00 AM on June 8</strong></div>
-                </div>
-                <p class="airport-tip">&#128161; Hampton Inn has free airport shuttle. Porter flies from Domestic Terminal.</p>
-            </div>
-            <div class="airport-card">
-                <div class="airport-code">YUL</div>
-                <h4>Montreal Airport (Trudeau)</h4>
-                <p class="airport-flight">Arrival PD384 14:12 &bull; Depart QR764 21:35 (June 12)</p>
-                <div class="airport-times">
-                    <div class="airport-time"><span>Arrival to car rental</span><strong>~15 min</strong></div>
-                    <div class="airport-time"><span>Depart: arrive 3 hrs early</span><strong>6:30 PM on June 12</strong></div>
-                    <div class="airport-time"><span>Qatar uses Terminal</span><strong>Jetée Internationale</strong></div>
-                </div>
-                <p class="airport-tip">&#128161; International departure from YUL is slow &mdash; don't be late. Qatar has a great lounge.</p>
-            </div>
-            <div class="airport-card">
-                <div class="airport-code">DOH</div>
-                <h4>Hamad Airport (Doha)</h4>
-                <p class="airport-flight">Arrival QR764 16:40 &bull; Depart QR942 19:40 (same day!)</p>
-                <div class="airport-times">
-                    <div class="airport-time"><span>Connection time</span><strong>3 hours (tight but fine)</strong></div>
-                    <div class="airport-time"><span>Transit security</span><strong>~15 min</strong></div>
-                    <div class="airport-time"><span>Al Mourjan Lounge</span><strong>Qatar Business/Priority Pass access</strong></div>
-                </div>
-                <p class="airport-tip">&#128161; World's best airport lounges &mdash; shower, eat, relax before the long flight home.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Travel Insurance Claim Kit -->
-<section class="section insurance-section" id="insurance-kit">
-    <div class="container">
-        <h2 class="section-title">&#127973; Travel Insurance Claim Kit</h2>
-        <p class="section-subtitle">In case anything goes wrong &mdash; here's what to keep</p>
-        <div class="insurance-grid">
-            <div class="insurance-card">
-                <h4>&#128203; Always Keep Documented</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="ins-1"><span>Photo of travel insurance policy (front + back)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-2"><span>24/7 emergency claim hotline number (save in phone)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-3"><span>Policy number and claim email</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-4"><span>Receipts for ALL rental cars, hotels, tours</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-5"><span>Receipt for travel insurance purchase (prove you paid)</span></label>
-                </div>
-            </div>
-            <div class="insurance-card">
-                <h4>&#129656; If Flight Is Delayed/Cancelled</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="ins-6"><span>Photo of departure board showing delay/cancel</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-7"><span>Get airline's written/emailed confirmation of delay</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-8"><span>Keep all meal/hotel receipts from delay period</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-9"><span>Note exact delay duration and new departure time</span></label>
-                </div>
-            </div>
-            <div class="insurance-card">
-                <h4>&#128138; If Medical Emergency</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="ins-10"><span>Call insurance emergency hotline FIRST (before treatment if possible)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-11"><span>Keep all medical bills, prescriptions, diagnoses</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-12"><span>Get a doctor's report in English</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-13"><span>Photograph any injuries for the claim</span></label>
-                </div>
-            </div>
-            <div class="insurance-card">
-                <h4>&#128682; If Bag Is Lost/Delayed</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="ins-14"><span>File PIR (Property Irregularity Report) at airport before leaving</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-15"><span>Keep bag tag + boarding pass</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-16"><span>Keep receipts for emergency purchases (toiletries, clothes)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-17"><span>Photograph contents BEFORE packing (as evidence)</span></label>
-                </div>
-            </div>
-            <div class="insurance-card">
-                <h4>&#128663; If Car Rental Incident</h4>
-                <div class="checklist">
-                    <label class="check-item"><input type="checkbox" data-id="ins-18"><span>Photograph ALL damage (before &amp; after pickup!)</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-19"><span>Call police for any accident, get report number</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-20"><span>Get driver details of other party if involved</span></label>
-                    <label class="check-item"><input type="checkbox" data-id="ins-21"><span>Contact rental company immediately</span></label>
-                </div>
-            </div>
-            <div class="insurance-card insurance-tips">
-                <h4>&#128161; Pro Tips</h4>
-                <ul>
-                    <li>Time limit: most claims must be filed within <strong>30 days</strong> of return</li>
-                    <li>Keep a <strong>paper trail</strong> of everything &mdash; emails count</li>
-                    <li>Use <strong>credit card's travel protection</strong> as secondary coverage</li>
-                    <li>Keep <strong>scans in cloud</strong> (Google Drive/iCloud) in case phone is lost</li>
-                    <li>If big incident: call your SG family to help coordinate</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Trip Summary (post-trip) -->
-<section class="section summary-section" id="trip-summary">
-    <div class="container">
-        <h2 class="section-title">&#128220; Trip Summary</h2>
-        <p class="section-subtitle">Your honeymoon at a glance</p>
-        <div class="summary-stats" id="summary-stats"></div>
-        <div class="summary-highlights" id="summary-highlights"></div>
-        <div class="summary-notes" id="summary-notes"></div>
-        <button class="summary-btn" id="generate-summary">Generate Trip Summary</button>
-    </div>
-</section>
-
-<!-- Confetti Canvas -->
-<canvas id="confetti-canvas"></canvas>
-
 <!-- Footer -->
 <footer class="footer">
     <p>Made with &#10084;&#65039; for the honeymoon of a lifetime</p>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-<script src="sync.js"></script>
-<script src="map.js"></script>
-<script src="aurora.js"></script>
 <script src="app.js"></script>
-<script src="extras.js"></script>
-<script src="extras2.js"></script>
-<script src="extras3.js"></script>
-<script src="livestatus.js"></script>
-<script>
-// Register service worker for offline support
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-}
-</script>
 </body>
 </html>
